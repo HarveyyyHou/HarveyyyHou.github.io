@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Dependency Survey Study | Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.05em;
+      margin-top: 6px;
+    }
+
+    .summary-box {
+      background: #f7f9fc;
+      border: 1px solid #dbe4f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 24px 0;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .result-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .result-card strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.95em;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      table {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>AI Dependency Survey Study</h1>
+
+    <p class="subtitle">
+      A quantitative study of AI reliance, trust, verification behavior, and usage motivations among university students.
+    </p>
+
+    <div class="summary-box">
+      <strong>Project summary:</strong>
+      This project examined predictors of AI dependency among university students using survey data.
+      The study focused on whether dependency is better explained by demographic characteristics,
+      usage motivations, psychological beliefs, or exposure intensity. The results suggest that AI
+      dependency is mainly belief-mediated: students who believe AI improves their performance and who
+      trust AI over instructors tend to report stronger dependency.
+    </div>
+
+    <h2>Research Question</h2>
+    <p>
+      What factors predict AI dependency among university students, and how are trust, perceived performance
+      improvement, usage purpose, and verification behavior related to students’ reliance on generative AI tools?
+    </p>
+
+    <h2>Data and Participants</h2>
+    <p>
+      The study collected online survey responses from university students about AI usage habits, beliefs,
+      verification behavior, and demographic characteristics. The final analysis used responses from
+      approximately 71 completed university-student surveys.
+    </p>
+
+    <h2>Measures</h2>
+    <ul>
+      <li>
+        <strong>AI dependency:</strong> a nine-item composite scale measuring behavioral, emotional,
+        and functional reliance on AI tools.
+      </li>
+      <li>
+        <strong>Psychological beliefs:</strong> perceived performance improvement, reduced verification behavior,
+        and trust in AI relative to instructors.
+      </li>
+      <li>
+        <strong>Exposure intensity:</strong> weekly screen time and AI adoption timing.
+      </li>
+      <li>
+        <strong>Usage context:</strong> primary AI usage purpose and social media platform usage.
+      </li>
+    </ul>
+
+    <h2>Methods</h2>
+    <p>
+      The analysis combined reliability assessment, factor analysis, correlation analysis, MANOVA/ANOVA,
+      hierarchical regression modeling, and descriptive qualitative analysis of open-ended responses.
+    </p>
+
+    <p>
+      <span class="tag">Survey Design</span>
+      <span class="tag">Cronbach’s Alpha</span>
+      <span class="tag">Factor Analysis</span>
+      <span class="tag">Correlation Analysis</span>
+      <span class="tag">MANOVA</span>
+      <span class="tag">ANOVA</span>
+      <span class="tag">Hierarchical Regression</span>
+      <span class="tag">Word Cloud</span>
+    </p>
+
+    <h2>Key Results</h2>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>~65%</strong>
+        Final model explained approximately 65% of the variance in AI dependency.
+      </div>
+
+      <div class="result-card">
+        <strong>α ≈ .77</strong>
+        The AI dependency scale showed acceptable internal consistency.
+      </div>
+
+      <div class="result-card">
+        <strong>p = .0033</strong>
+        AI usage purpose significantly predicted AI dependency in ANOVA.
+      </div>
+
+      <div class="result-card">
+        <strong>Belief predictors</strong>
+        Performance improvement and trust in AI over instructors were strong predictors.
+      </div>
+    </div>
+
+    <h3>Usage Purpose and Dependency</h3>
+    <p>
+      AI usage purpose was significantly associated with dependency levels. Students using AI primarily for
+      problem solving or task completion reported higher dependency than students using AI mainly for consultation.
+      The ANOVA result was F(2, 68) = 6.21, p = .0033, with a medium effect size.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>AI Usage Purpose</th>
+          <th>Mean AI Dependency Score</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Consultation</td>
+          <td>2.30</td>
+        </tr>
+
+        <tr>
+          <td>Problem Solving</td>
+          <td>2.96</td>
+        </tr>
+
+        <tr>
+          <td>Task Completion</td>
+          <td>2.86</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Hierarchical Regression Findings</h3>
+    <p>
+      Demographic variables explained little variance in AI dependency. Adding usage motivation and psychological
+      belief variables substantially improved the model. In the final model, perceived performance improvement,
+      trust in AI over instructors, and task-completion purpose were especially important predictors.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Predictor</th>
+          <th>Final Model β</th>
+          <th>p-value</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Task Completion Purpose</td>
+          <td>0.357</td>
+          <td>.031</td>
+        </tr>
+
+        <tr>
+          <td>Performance Improved</td>
+          <td>0.312</td>
+          <td>&lt;.001</td>
+        </tr>
+
+        <tr>
+          <td>Trust AI over Instructor</td>
+          <td>0.174</td>
+          <td>.016</td>
+        </tr>
+
+        <tr>
+          <td>Reduced Verification</td>
+          <td>0.117</td>
+          <td>.106</td>
+        </tr>
+
+        <tr>
+          <td>Weekly Screen Time</td>
+          <td>0.114</td>
+          <td>.127</td>
+        </tr>
+
+        <tr>
+          <td>AI Adoption Timing</td>
+          <td>0.107</td>
+          <td>.153</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Qualitative Findings</h2>
+    <p>
+      Open-ended responses suggested that students frequently used AI for academic tasks such as writing,
+      essays, papers, classwork, and assignments. The word “code” also appeared, suggesting technical and
+      programming-related use. Words such as “verify” and “check” indicated that some students were aware of
+      the need to evaluate AI-generated outputs, while terms such as “employment,” “application,” and
+      “internship” showed that AI use extended into career-related activities.
+    </p>
+
+    <h2>Conclusion</h2>
+    <p>
+      The study suggests that AI dependency among university students is driven less by demographics or simple
+      exposure and more by psychological beliefs. Students who view AI as performance-enhancing and who trust
+      AI more than instructors are more likely to report dependency. These findings highlight the importance of
+      AI literacy, trust calibration, and verification habits in higher education.
+    </p>
+
+    <h2>Skills Demonstrated</h2>
+    <p>
+      <span class="tag">Quantitative Research</span>
+      <span class="tag">Survey Analysis</span>
+      <span class="tag">Regression Modeling</span>
+      <span class="tag">Statistical Interpretation</span>
+      <span class="tag">Human-AI Interaction</span>
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Research Communication</span>
+    </p>
+
+    <a class="back-link" href="index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
