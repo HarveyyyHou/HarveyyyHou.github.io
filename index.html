@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 290px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.1em;
+      margin-top: 6px;
+    }
+
+    .project-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      background: #fafafa;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    .news-item {
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="#home">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="#home">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="ai-dependency.html">AI Dependency Survey Study</a>
+            <a href="#csi">AI Internship at Coaching and Sales Institute</a>
+            <a href="#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="#infrastructure">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="#news">News About Me</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="home">
+    <h1>Junyi Hou</h1>
+
+    <p class="subtitle">
+      MSc Statistics Student at McMaster University | Applied Data Science | Quantitative Research | Human-AI Interaction
+    </p>
+
+    <h2>About</h2>
+    <p>
+      I am an MSc Statistics student at McMaster University with interests in applied statistics,
+      data science, machine learning, human-AI interaction, and quantitative research. My background includes
+      statistical modeling, survey analysis, clustering, data visualization, AI workflow automation, and applied
+      machine learning projects.
+    </p>
+
+    <h2>Work Interests</h2>
+    <ul>
+      <li>Human-AI interaction, AI reliance, and trust in generative AI systems</li>
+      <li>Survey and behavioural data analysis</li>
+      <li>Regression, experimental design, and applied statistical modeling</li>
+      <li>Machine learning, clustering, and data visualization</li>
+      <li>Reproducible research workflows using R, Python, and GitHub</li>
+    </ul>
+
+    <h2 id="projects">Selected Projects</h2>
+
+    <div class="project-card" id="ai-reliance">
+      <h3>AI Dependency Survey Study</h3>
+      <p>
+        Conducted a quantitative survey study on AI dependency among university students, focusing on how
+        usage motivations, psychological beliefs, trust in AI, and verification habits relate to reliance on
+        generative AI tools. The final hierarchical regression model explained approximately 65% of the variance
+        in AI dependency, with perceived performance improvement and trust in AI over instructors emerging as
+        key predictors.
+      </p>
+
+      <p>
+        <span class="tag">Survey Research</span>
+        <span class="tag">Regression</span>
+        <span class="tag">MANOVA</span>
+        <span class="tag">ANOVA</span>
+        <span class="tag">Cronbach’s Alpha</span>
+        <span class="tag">Factor Analysis</span>
+        <span class="tag">Human-AI Interaction</span>
+      </p>
+
+      <a class="button-link" href="ai-dependency.html">View project details</a>
+    </div>
+
+    <div class="project-card" id="csi">
+      <h3>AI Internship at Coaching and Sales Institute</h3>
+      <p>
+        Worked on prompt engineering, AI agents, workflow automation, and evaluation of AI-generated outputs.
+        Built practical experience with applied AI tools and business-facing automation workflows.
+      </p>
+    </div>
+
+    <div class="project-card" id="aml">
+      <h3>Scotiabank × UofT Big Data & AI Competition</h3>
+      <p>
+        Top 5 finalist in a university-wide Big Data and AI competition. Built an end-to-end anti-money
+        laundering analytics solution using applied data science methods.
+      </p>
+    </div>
+
+    <div class="project-card" id="infrastructure">
+      <h3>Ontario Infrastructure Clustering Project</h3>
+      <p>
+        Applied clustering, PCA, and Power BI visualization to analyze public infrastructure projects in Ontario.
+        The project focused on identifying patterns across project categories, funding types, locations, and status.
+      </p>
+    </div>
+
+    <h2>Technical Skills</h2>
+    <p>
+      <span class="tag">R</span>
+      <span class="tag">Python</span>
+      <span class="tag">SQL</span>
+      <span class="tag">Power BI</span>
+      <span class="tag">Excel</span>
+      <span class="tag">Regression</span>
+      <span class="tag">Machine Learning</span>
+      <span class="tag">Clustering</span>
+      <span class="tag">Survey Analysis</span>
+      <span class="tag">Data Visualization</span>
+      <span class="tag">GitHub</span>
+      <span class="tag">Reproducible Research</span>
+    </p>
+
+    <h2 id="news">News About Me</h2>
+
+    <div class="news-item">
+      <strong>2026–2027:</strong> MSc Statistics student at McMaster University.
+    </div>
+
+    <div class="news-item">
+      <strong>2026 July:</strong> Earned Microsoft Azure Data Fundamentals certification.
+      <a href="https://learn.microsoft.com/api/credentials/share/en-us/JunyiHou-3874/B211B0E16851AEC2?sharingId">
+        View credential
+      </a>
+    </div>
+
+    <div class="news-item">
+      <strong>2025 November–2026 April:</strong> Top 5 finalist in the Scotiabank × UofT Big Data & AI Competition.
+    </div>
+
+    <h2 id="contact">Contact</h2>
+    <p>
+      GitHub: <a href="https://github.com/HarveyyyHou">github.com/HarveyyyHou</a><br />
+      LinkedIn: <a href="https://www.linkedin.com/in/junyi-hou-623426279">linkedin.com/in/junyi-hou-623426279</a><br />
+      Email: <a href="mailto:houj49@mcmaster.ca">houj49@mcmaster.ca</a><br />
+      Personal Email: <a href="mailto:houjunyi915@gmail.com">houjunyi915@gmail.com</a>
+    </p>
+  </main>
+</body>
+</html>
