@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News & Ongoing | Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.3em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.1em;
+      margin-top: 6px;
+    }
+
+    .news-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      background: #fafafa;
+    }
+
+    .date {
+      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="../index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="../projects/index.html">General</a>
+            <a href="../projects/ai-dependency.html">AI Dependency Survey Study</a>
+            <a href="../projects/spss-osslt-regression.html">SPSS OSSLT Regression</a>
+            <a href="../index.html#csi">AI Internship at Coaching and Sales Institute</a>
+            <a href="../index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="../index.html#infrastructure">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="news.html">News &amp; Ongoing</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>News &amp; Ongoing</h1>
+
+    <p class="subtitle">
+      Current updates, ongoing preparation, certifications, and recent project milestones.
+    </p>
+
+    <h2>Ongoing</h2>
+
+    <div class="news-card">
+      <h3>Preparing for McMaster DASH Support Hub Opportunities</h3>
+      <div class="date">2026 July – Ongoing</div>
+      <p>
+        I am preparing for potential student support roles related to data analysis, statistical software,
+        and GIS tools. My current focus is strengthening practical experience with SPSS and ArcGIS while
+        connecting these tools to existing applied statistics and data science projects.
+      </p>
+      <p>
+        <span class="tag">DASH</span>
+        <span class="tag">SPSS</span>
+        <span class="tag">ArcGIS</span>
+        <span class="tag">Research Support</span>
+      </p>
+    </div>
+
+    <div class="news-card">
+      <h3>ArcGIS Extension of Ontario Infrastructure Clustering Project</h3>
+      <div class="date">2026 July – Planned</div>
+      <p>
+        I am developing a GIS-focused extension of my Ontario infrastructure clustering project.
+        The goal is to use ArcGIS to map infrastructure project clusters from longitude and latitude data,
+        style points by cluster/category/status/funding, and export clean map layouts.
+      </p>
+      <p>
+        <span class="tag">ArcGIS</span>
+        <span class="tag">GIS</span>
+        <span class="tag">Clustering</span>
+        <span class="tag">Infrastructure Data</span>
+      </p>
+    </div>
+
+    <div class="news-card">
+      <h3>McMaster Research and Lab Outreach</h3>
+      <div class="date">2026 July – Ongoing</div>
+      <p>
+        I am actively reaching out to McMaster research groups and labs where my background in statistics,
+        data analysis, regression modeling, and applied research workflows can contribute to interdisciplinary
+        projects.
+      </p>
+      <p>
+        <span class="tag">Research</span>
+        <span class="tag">Statistics</span>
+        <span class="tag">Data Analysis</span>
+        <span class="tag">McMaster</span>
+      </p>
+    </div>
+
+    <h2>Recent Updates</h2>
+
+    <div class="news-card">
+      <h3>Built SPSS OSSLT Regression Portfolio Project</h3>
+      <div class="date">2026 July</div>
+      <p>
+        Completed an IBM SPSS regression project analyzing Ontario school-level OSSLT first-attempt
+        pass rates. The project includes data cleaning, variable recoding, regression diagnostics,
+        model comparison, influence checks, outlier removal, and final model interpretation.
+      </p>
+      <p>
+        <span class="tag">SPSS</span>
+        <span class="tag">Regression</span>
+        <span class="tag">Model Diagnostics</span>
+        <span class="tag">Education Data</span>
+      </p>
+      <a class="button-link" href="../projects/spss-osslt-regression.html">View project</a>
+    </div>
+
+    <div class="news-card">
+      <h3>Earned Microsoft Azure Data Fundamentals Certification</h3>
+      <div class="date">2026 July</div>
+      <p>
+        Earned the Microsoft Azure Data Fundamentals certification, strengthening my foundation in
+        cloud data concepts, relational and non-relational data, analytics workloads, and Azure data services.
+      </p>
+      <p>
+        <span class="tag">Azure</span>
+        <span class="tag">Data Fundamentals</span>
+        <span class="tag">Cloud Data</span>
+      </p>
+      <a class="button-link" href="https://learn.microsoft.com/api/credentials/share/en-us/JunyiHou-3874/B211B0E16851AEC2?sharingId">
+        View credential
+      </a>
+    </div>
+
+    <div class="news-card">
+      <h3>Incoming MSc Statistics Student at McMaster University</h3>
+      <div class="date">2026–2027</div>
+      <p>
+        I will be joining McMaster University as an MSc Statistics student, with interests in applied
+        statistics, data science, quantitative research, machine learning, and interdisciplinary research support.
+      </p>
+      <p>
+        <span class="tag">McMaster University</span>
+        <span class="tag">MSc Statistics</span>
+        <span class="tag">Applied Statistics</span>
+      </p>
+    </div>
+
+    <div class="news-card">
+      <h3>Top 5 Finalist: Scotiabank × UofT Big Data & AI Competition</h3>
+      <div class="date">2025 November – 2026 April</div>
+      <p>
+        Selected as a Top 5 finalist in the Scotiabank × UofT Big Data & AI Competition.
+        Our team developed an end-to-end anti-money laundering analytics solution using applied
+        data science methods.
+      </p>
+      <p>
+        <span class="tag">Data Science Competition</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">AML</span>
+        <span class="tag">Team Project</span>
+      </p>
+      <a class="button-link" href="../index.html#aml">View summary</a>
+    </div>
+
+    <a class="back-link" href="../index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
