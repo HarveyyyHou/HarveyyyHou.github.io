@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPSS OSSLT Regression | Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.05em;
+      margin-top: 6px;
+    }
+
+    .summary-box {
+      background: #f7f9fc;
+      border: 1px solid #dbe4f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 24px 0;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .result-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .result-card strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.95em;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin: 6px 8px 6px 0;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+
+      table {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="projects.html">General</a>
+            <a href="ai-dependency.html">AI Dependency Survey Study</a>
+            <a href="osslt-spss.html">SPSS OSSLT Regression</a>
+            <a href="index.html#csi">AI Internship at Coaching and Sales Institute</a>
+            <a href="index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="index.html#infrastructure">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="index.html#news">News About Me</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>SPSS OSSLT Regression</h1>
+
+    <p class="subtitle">
+      A multiple linear regression analysis in IBM SPSS using Ontario school-level OSSLT data.
+    </p>
+
+    <div class="summary-box">
+      <strong>Project summary:</strong>
+      This project analyzed Ontario school-level OSSLT first-attempt pass rates using IBM SPSS.
+      The analysis studied how school type, school language, special education services,
+      low-income household percentage, and parental education level relate to OSSLT outcomes.
+      The workflow includes data cleaning, variable recoding, descriptive statistics, multiple
+      linear regression, diagnostic checks, response transformation, model comparison, influence
+      diagnostics, outlier removal, and final model interpretation.
+    </div>
+
+    <p>
+      <a class="button-link" href="OSSLT_SPSS_Output_Clean.pdf">View SPSS output PDF</a>
+      <a class="button-link" href="OSSLT_SPSS_DASH.sps">View SPSS syntax</a>
+    </p>
+
+    <h2>Research Question</h2>
+    <p>
+      How do school type, school language, special education services, family income, and parental
+      education level influence OSSLT first-attempt pass rates in Ontario schools?
+    </p>
+
+    <h2>Data</h2>
+    <p>
+      The analysis used Ontario school-level data. The original dataset contained 4,926 observations.
+      After selecting relevant variables and removing incomplete cases, the cleaned analysis dataset
+      contained 737 schools.
+    </p>
+
+    <h2>Variables</h2>
+    <ul>
+      <li><strong>Response variable:</strong> OSSLT first-attempt pass rate.</li>
+      <li><strong>Categorical predictors:</strong> school type and school language.</li>
+      <li><strong>Numerical predictors:</strong> special education percentage, low-income household percentage, and percentage of students whose parents have no degree/diploma/certificate.</li>
+    </ul>
+
+    <h2>SPSS Workflow</h2>
+    <p>
+      The SPSS workflow was designed to build practical familiarity with SPSS syntax, output
+      interpretation, regression diagnostics, and applied statistical reporting.
+    </p>
+
+    <ul>
+      <li>Imported the raw dataset into IBM SPSS.</li>
+      <li>Selected and renamed variables used in the regression analysis.</li>
+      <li>Converted numeric-looking string variables into numeric SPSS variables.</li>
+      <li>Created dummy variables for categorical predictors.</li>
+      <li>Generated descriptive statistics, frequency tables, bar charts, and histograms.</li>
+      <li>Ran preliminary multiple linear regression.</li>
+      <li>Saved predicted values and residuals for diagnostics.</li>
+      <li>Created transformed response variables: log, square root, and squared OSSLT pass rate.</li>
+      <li>Compared models using R², adjusted R², RSS, AIC, and BIC.</li>
+      <li>Added a squared special education term to model a nonlinear relationship.</li>
+      <li>Checked standardized residuals, studentized residuals, leverage, Cook’s distance, and DFFITS.</li>
+      <li>Removed influential observations and fit the final model.</li>
+    </ul>
+
+    <h2>Descriptive Results</h2>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>737</strong>
+        Cleaned school-level observations.
+      </div>
+
+      <div class="result-card">
+        <strong>82.45%</strong>
+        Mean OSSLT first-attempt pass rate.
+      </div>
+
+      <div class="result-card">
+        <strong>24.07%</strong>
+        Mean percentage of students receiving special education services.
+      </div>
+
+      <div class="result-card">
+        <strong>15.27%</strong>
+        Mean percentage of school-aged children in low-income households.
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>N</th>
+          <th>Mean</th>
+          <th>Standard Deviation</th>
+          <th>Minimum</th>
+          <th>Maximum</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>OSSLT Pass Rate</td>
+          <td>737</td>
+          <td>82.45</td>
+          <td>11.93</td>
+          <td>0</td>
+          <td>100</td>
+        </tr>
+
+        <tr>
+          <td>Special Education %</td>
+          <td>737</td>
+          <td>24.07</td>
+          <td>11.53</td>
+          <td>0</td>
+          <td>100</td>
+        </tr>
+
+        <tr>
+          <td>Low Income %</td>
+          <td>737</td>
+          <td>15.27</td>
+          <td>7.30</td>
+          <td>0</td>
+          <td>46</td>
+        </tr>
+
+        <tr>
+          <td>No Parent Degree %</td>
+          <td>737</td>
+          <td>6.76</td>
+          <td>5.42</td>
+          <td>0</td>
+          <td>37</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Preliminary Model</h2>
+    <p>
+      The preliminary multiple linear regression model used the untransformed OSSLT pass rate as
+      the response variable. The model included school type, school language, special education
+      percentage, low-income percentage, and parental education percentage.
+    </p>
+
+    <p>
+      The preliminary model explained approximately 54.5% of the variation in OSSLT pass rates.
+      School language, special education percentage, low-income percentage, and parental education
+      were statistically significant predictors, while school type was not statistically significant.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Predictor</th>
+          <th>Coefficient</th>
+          <th>p-value</th>
+          <th>Interpretation</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Public School</td>
+          <td>-1.069</td>
+          <td>.101</td>
+          <td>Not statistically significant after accounting for other predictors.</td>
+        </tr>
+
+        <tr>
+          <td>French School</td>
+          <td>5.459</td>
+          <td>&lt;.001</td>
+          <td>French-language schools were associated with higher OSSLT pass rates.</td>
+        </tr>
+
+        <tr>
+          <td>Special Education %</td>
+          <td>-0.621</td>
+          <td>&lt;.001</td>
+          <td>Higher special education percentage was associated with lower pass rates.</td>
+        </tr>
+
+        <tr>
+          <td>Low Income %</td>
+          <td>-0.296</td>
+          <td>&lt;.001</td>
+          <td>Higher low-income percentage was associated with lower pass rates.</td>
+        </tr>
+
+        <tr>
+          <td>No Parent Degree %</td>
+          <td>-0.465</td>
+          <td>&lt;.001</td>
+          <td>Higher percentage of parents without post-secondary credentials was associated with lower pass rates.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Model Selection and Transformation</h2>
+    <p>
+      To improve model assumptions and compare model performance, I created log, square-root,
+      and squared response transformations. I also manually computed RSS, AIC, and BIC in SPSS
+      for model comparison.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>N</th>
+          <th>RSS</th>
+          <th>AIC</th>
+          <th>BIC</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Original</td>
+          <td>737</td>
+          <td>47708.97</td>
+          <td>5179.02</td>
+          <td>5211.23</td>
+        </tr>
+
+        <tr>
+          <td>Log-transformed</td>
+          <td>737</td>
+          <td>107.57</td>
+          <td>687.20</td>
+          <td>719.42</td>
+        </tr>
+
+        <tr>
+          <td>Square-root transformed</td>
+          <td>737</td>
+          <td>206.73</td>
+          <td>1168.66</td>
+          <td>1200.88</td>
+        </tr>
+
+        <tr>
+          <td>Squared response</td>
+          <td>737</td>
+          <td>1074161112.40</td>
+          <td>12565.18</td>
+          <td>12597.40</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Predictor Transformation</h2>
+    <p>
+      After choosing the square-root-transformed response, I compared models with and without
+      school type and with and without a squared special education term. Adding the squared
+      special education term improved model fit, while school type contributed little once the
+      other variables were included.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>N</th>
+          <th>RSS</th>
+          <th>AIC</th>
+          <th>BIC</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Sqrt model</td>
+          <td>737</td>
+          <td>206.73</td>
+          <td>1168.66</td>
+          <td>1200.88</td>
+        </tr>
+
+        <tr>
+          <td>Add squared special education term</td>
+          <td>737</td>
+          <td>198.04</td>
+          <td>1139.00</td>
+          <td>1175.82</td>
+        </tr>
+
+        <tr>
+          <td>Drop school type + add squared special education</td>
+          <td>737</td>
+          <td>198.96</td>
+          <td>1140.41</td>
+          <td>1172.63</td>
+        </tr>
+
+        <tr>
+          <td>Drop school type only</td>
+          <td>737</td>
+          <td>207.16</td>
+          <td>1168.20</td>
+          <td>1195.81</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Influence Diagnostics and Outlier Removal</h2>
+    <p>
+      I used SPSS to check standardized residuals, studentized residuals, leverage, Cook’s distance,
+      and DFFITS. The influence diagnostics identified a small number of cases with extreme or
+      influential behavior. After removing selected influential observations, the model fit improved.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Comparison</th>
+          <th>N</th>
+          <th>RSS</th>
+          <th>AIC</th>
+          <th>BIC</th>
+          <th>Residual Std. Error</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Before outlier removal</td>
+          <td>737</td>
+          <td>198.96</td>
+          <td>1140.41</td>
+          <td>1172.63</td>
+          <td>0.5217</td>
+        </tr>
+
+        <tr>
+          <td>After outlier removal</td>
+          <td>728</td>
+          <td>131.03</td>
+          <td>831.53</td>
+          <td>863.66</td>
+          <td>0.4260</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Final Model</h2>
+    <p>
+      The final SPSS model used the square-root-transformed OSSLT pass rate as the response
+      variable and included school language, special education percentage, squared special education
+      percentage, low-income percentage, and parental education percentage.
+    </p>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>R² = .598</strong>
+        The final model explained about 59.8% of the variation in the square-root-transformed OSSLT pass rate.
+      </div>
+
+      <div class="result-card">
+        <strong>Adjusted R² = .595</strong>
+        The adjusted model fit remained strong after accounting for predictor count.
+      </div>
+
+      <div class="result-card">
+        <strong>AIC = 831.53</strong>
+        AIC improved substantially after transformation and outlier removal.
+      </div>
+
+      <div class="result-card">
+        <strong>BIC = 863.66</strong>
+        BIC also improved in the final model.
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Predictor</th>
+          <th>Coefficient</th>
+          <th>p-value</th>
+          <th>Interpretation</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>French School</td>
+          <td>0.311</td>
+          <td>&lt;.001</td>
+          <td>French-language schools were associated with higher square-root-transformed OSSLT pass rates.</td>
+        </tr>
+
+        <tr>
+          <td>Special Education %</td>
+          <td>-0.014</td>
+          <td>&lt;.001</td>
+          <td>Higher special education percentage was associated with lower OSSLT performance.</td>
+        </tr>
+
+        <tr>
+          <td>Special Education % Squared</td>
+          <td>approximately -0.0003</td>
+          <td>&lt;.001</td>
+          <td>The negative effect of special education percentage became stronger at higher levels.</td>
+        </tr>
+
+        <tr>
+          <td>Low Income %</td>
+          <td>-0.012</td>
+          <td>&lt;.001</td>
+          <td>Higher low-income percentage was associated with lower OSSLT performance.</td>
+        </tr>
+
+        <tr>
+          <td>No Parent Degree %</td>
+          <td>-0.031</td>
+          <td>&lt;.001</td>
+          <td>Higher percentage of parents without post-secondary credentials was associated with lower OSSLT performance.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Conclusion</h2>
+    <p>
+      The SPSS analysis identified socioeconomic indicators, special education concentration, and
+      school language as meaningful predictors of OSSLT first-attempt success rates. School type was
+      not retained in the final model because it contributed little after accounting for the other predictors.
+    </p>
+
+    <p>
+      This project also demonstrates practical SPSS skills that are useful in applied research support:
+      importing data, cleaning variables, recoding categories, running regression models, saving residuals,
+      checking assumptions, computing model comparison metrics, and exporting statistical output.
+    </p>
+
+    <h2>Skills Demonstrated</h2>
+    <p>
+      <span class="tag">IBM SPSS</span>
+      <span class="tag">Multiple Linear Regression</span>
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Dummy Coding</span>
+      <span class="tag">Residual Diagnostics</span>
+      <span class="tag">AIC/BIC</span>
+      <span class="tag">Influence Diagnostics</span>
+      <span class="tag">Education Data Analysis</span>
+      <span class="tag">Research Communication</span>
+    </p>
+
+    <a class="back-link" href="index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
