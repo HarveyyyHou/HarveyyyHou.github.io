@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects | Junyi Hou</title>
+  <title>Junyi Hou</title>
 
   <style>
     html {
@@ -114,7 +114,7 @@
     }
 
     h1 {
-      font-size: 2.3em;
+      font-size: 2.4em;
       margin-bottom: 0;
     }
 
@@ -143,6 +143,19 @@
       background: #fafafa;
     }
 
+    ul {
+      padding-left: 22px;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     .tag {
       display: inline-block;
       background: #f1f1f1;
@@ -168,15 +181,6 @@
       text-decoration: none;
     }
 
-    a {
-      color: #0056b3;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
     @media (max-width: 650px) {
       .nav-container {
         align-items: flex-start;
@@ -199,10 +203,10 @@
 <body>
   <header class="navbar">
     <nav class="nav-container">
-      <a class="nav-name" href="../index.html">Junyi Hou</a>
+      <a class="nav-name" href="index.html">Junyi Hou</a>
 
       <div class="nav-links">
-        <a href="../index.html">Home</a>
+        <a href="index.html">Home</a>
 
         <div class="dropdown">
           <button class="dropbtn">Projects ▾</button>
@@ -210,80 +214,93 @@
             <a href="projects/index.html">General</a>
             <a href="projects/ai-dependency.html">AI Dependency Survey Study</a>
             <a href="projects/spss-osslt-regression.html">SPSS OSSLT Regression</a>
-            <a href="../index.html#csi">AI Internship at Coaching and Sales Institute</a>
-            <a href="../index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
-            <a href="../index.html#infrastructure">Ontario Infrastructure Clustering Project</a>
+            <a href="#csi">AI Internship at Coaching and Sales Institute</a>
+            <a href="#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="#infrastructure">Ontario Infrastructure Clustering Project</a>
           </div>
         </div>
 
-        <a href="../pages/news.html">News &amp; Ongoing</a>
-        <a href="../index.html#contact">Contact</a>
+        <a href="pages/news.html">News &amp; Ongoing</a>
+        <a href="#contact">Contact</a>
       </div>
     </nav>
   </header>
 
   <main>
-    <h1>Projects</h1>
+    <h1>Junyi Hou</h1>
 
     <p class="subtitle">
-      Selected applied statistics, data science, AI, and research workflow projects.
+      MSc Statistics Student at McMaster University | Applied Data Science | Quantitative Research | Human-AI Interaction
     </p>
 
-    <h2>Project Overview</h2>
+    <h2>About</h2>
     <p>
-      My projects focus on applied statistics, data analysis, machine learning, human-AI interaction,
-      reproducible research, and practical analytics workflows. They include survey research, regression
-      modeling, clustering, SPSS analysis, AI workflow automation, and competition-based data science work.
+      I am an MSc Statistics student at McMaster University with interests in applied statistics,
+      data science, machine learning, human-AI interaction, and quantitative research. My background includes
+      statistical modeling, survey analysis, clustering, data visualization, AI workflow automation, and applied
+      machine learning projects.
     </p>
+
+    <h2>Work Interests</h2>
+    <ul>
+      <li>Human-AI interaction, AI reliance, and trust in generative AI systems</li>
+      <li>Survey and behavioural data analysis</li>
+      <li>Regression, experimental design, and applied statistical modeling</li>
+      <li>Machine learning, clustering, GIS, and data visualization</li>
+      <li>Research support workflows using R, Python, SPSS, Excel, Power BI, ArcGIS, and GitHub</li>
+    </ul>
+
+    <h2 id="projects">Selected Projects</h2>
 
     <div class="project-card">
       <h3>AI Dependency Survey Study</h3>
       <p>
-        A quantitative survey study examining AI dependency, trust in AI, verification behavior,
-        usage motivation, and student reliance on generative AI tools. The project demonstrates
-        survey analysis, regression modeling, reliability assessment, factor analysis, and research
-        communication.
+        Conducted a quantitative survey study on AI dependency among university students, focusing on how
+        usage motivations, psychological beliefs, trust in AI, and verification habits relate to reliance on
+        generative AI tools. The project involved survey analysis, regression modeling, reliability assessment,
+        factor analysis, and research communication.
       </p>
 
       <p>
         <span class="tag">Survey Research</span>
         <span class="tag">Regression</span>
-        <span class="tag">Human-AI Interaction</span>
+        <span class="tag">MANOVA</span>
+        <span class="tag">ANOVA</span>
         <span class="tag">Cronbach’s Alpha</span>
         <span class="tag">Factor Analysis</span>
-        <span class="tag">Research Writing</span>
+        <span class="tag">Human-AI Interaction</span>
       </p>
 
-      <a class="button-link" href="ai-dependency.html">View project</a>
+      <a class="button-link" href="projects/ai-dependency.html">View project details</a>
     </div>
 
     <div class="project-card">
       <h3>SPSS OSSLT Regression</h3>
       <p>
         Conducted a multiple linear regression analysis in IBM SPSS using Ontario school-level
-        OSSLT data. The project demonstrates SPSS data cleaning, regression diagnostics,
-        model comparison, influence checks, outlier removal, and final model interpretation.
+        OSSLT data. The project involved data cleaning, variable recoding, descriptive statistics,
+        regression diagnostics, response transformation, model comparison, influence checks,
+        outlier removal, and final model interpretation.
       </p>
 
       <p>
         <span class="tag">SPSS</span>
         <span class="tag">Regression</span>
         <span class="tag">Data Cleaning</span>
-        <span class="tag">AIC/BIC</span>
         <span class="tag">Model Diagnostics</span>
+        <span class="tag">AIC/BIC</span>
         <span class="tag">Education Data</span>
       </p>
 
-      <a class="button-link" href="spss-osslt-regression.html">View project</a>
+      <a class="button-link" href="projects/spss-osslt-regression.html">View project details</a>
     </div>
 
-    <div class="project-card">
+    <div class="project-card" id="infrastructure">
       <h3>Ontario Infrastructure Clustering Project</h3>
       <p>
-        Applied clustering, PCA, and Power BI visualization to analyze Ontario public infrastructure
-        projects. The project focused on identifying patterns across project categories, funding types,
-        project locations, and project status. A GIS extension using ArcGIS is planned to map project
-        clusters using longitude and latitude data.
+        Applied clustering, PCA, and Power BI visualization to analyze Ontario public infrastructure projects.
+        The project focused on identifying patterns across project categories, funding types, locations, and status.
+        A GIS extension using ArcGIS is planned to map infrastructure clusters using longitude and latitude data.
       </p>
 
       <p>
@@ -294,16 +311,13 @@
         <span class="tag">ArcGIS Planned</span>
         <span class="tag">Public Data</span>
       </p>
-
-      <a class="button-link" href="../index.html#infrastructure">View summary</a>
     </div>
 
-    <div class="project-card">
+    <div class="project-card" id="aml">
       <h3>Scotiabank × UofT Big Data & AI Competition</h3>
       <p>
-        Top 5 finalist project focused on building an end-to-end anti-money laundering analytics
-        solution. The project involved applied data science, financial risk analysis, teamwork,
-        and communicating results to industry judges.
+        Top 5 finalist in a university-wide Big Data and AI competition. Built an end-to-end anti-money
+        laundering analytics solution using applied data science methods.
       </p>
 
       <p>
@@ -313,31 +327,47 @@
         <span class="tag">Data Science Competition</span>
         <span class="tag">Team Project</span>
       </p>
-
-      <a class="button-link" href="../index.html#aml">View summary</a>
     </div>
 
-    <div class="project-card">
+    <div class="project-card" id="csi">
       <h3>AI Internship at Coaching and Sales Institute</h3>
       <p>
-        Worked on prompt engineering, AI agents, workflow automation, and evaluation of AI-generated
-        outputs in a business-facing AI internship setting. The experience strengthened practical AI
-        implementation, documentation, and communication skills.
+        Worked on prompt engineering, AI agents, workflow automation, and evaluation of AI-generated outputs.
+        Built practical experience with applied AI tools, documentation, and business-facing automation workflows.
       </p>
 
       <p>
         <span class="tag">Prompt Engineering</span>
         <span class="tag">AI Agents</span>
         <span class="tag">Workflow Automation</span>
-        <span class="tag">Evaluation</span>
         <span class="tag">Documentation</span>
       </p>
-
-      <a class="button-link" href="../index.html#csi">View summary</a>
     </div>
 
+    <h2>Technical Skills</h2>
     <p>
-      <a href="../index.html">← Back to homepage</a>
+      <span class="tag">R</span>
+      <span class="tag">Python</span>
+      <span class="tag">SPSS</span>
+      <span class="tag">SQL</span>
+      <span class="tag">Power BI</span>
+      <span class="tag">Excel</span>
+      <span class="tag">ArcGIS</span>
+      <span class="tag">Regression</span>
+      <span class="tag">Machine Learning</span>
+      <span class="tag">Clustering</span>
+      <span class="tag">Survey Analysis</span>
+      <span class="tag">Data Visualization</span>
+      <span class="tag">GitHub</span>
+      <span class="tag">Research Communication</span>
+    </p>
+
+    <h2 id="contact">Contact</h2>
+    <p>
+      GitHub: <a href="https://github.com/HarveyyyHou">github.com/HarveyyyHou</a><br />
+      LinkedIn: <a href="https://www.linkedin.com/in/junyi-hou-623426279">linkedin.com/in/junyi-hou-623426279</a><br />
+      Email: <a href="mailto:houj49@mcmaster.ca">houj49@mcmaster.ca</a><br />
+      Personal Email: <a href="mailto:houjunyi915@gmail.com">houjunyi915@gmail.com</a>
     </p>
   </main>
 </body>
