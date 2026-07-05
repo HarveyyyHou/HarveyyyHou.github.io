@@ -54,16 +54,63 @@
       flex-wrap: wrap;
     }
 
-    .nav-links a {
+    .nav-links a,
+    .dropbtn {
       color: #222;
       text-decoration: none;
       font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
       padding: 6px 0;
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .dropbtn:hover {
       color: #0056b3;
       text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
     }
 
     h1 {
@@ -163,6 +210,15 @@
         gap: 8px;
       }
 
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+
       table {
         font-size: 0.85em;
       }
@@ -173,25 +229,25 @@
 <body>
   <header class="navbar">
     <nav class="nav-container">
-      <a class="nav-name" href="index.html">Junyi Hou</a>
+      <a class="nav-name" href="../index.html">Junyi Hou</a>
 
       <div class="nav-links">
-        <a href="index.html">Home</a>
+        <a href="../index.html">Home</a>
 
         <div class="dropdown">
           <button class="dropbtn">Projects ▾</button>
           <div class="dropdown-content">
-            <a href="projects.html">General</a>
+            <a href="index.html">General</a>
             <a href="ai-dependency.html">AI Dependency Survey Study</a>
-            <a href="osslt-spss.html">SPSS OSSLT Regression</a>
-            <a href="index.html#csi">AI Internship at Coaching and Sales Institute</a>
-            <a href="index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
-            <a href="index.html#infrastructure">Ontario Infrastructure Clustering Project</a>
+            <a href="spss-osslt-regression.html">SPSS OSSLT Regression</a>
+            <a href="../index.html#csi">AI Internship at Coaching and Sales Institute</a>
+            <a href="../index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="../index.html#infrastructure">Ontario Infrastructure Clustering Project</a>
           </div>
         </div>
-        
-        <a href="pages/news.html">News &amp; Ongoing</a>
-        <a href="index.html#contact">Contact</a>
+
+        <a href="../pages/news.html">News &amp; Ongoing</a>
+        <a href="../index.html#contact">Contact</a>
       </div>
     </nav>
   </header>
@@ -400,7 +456,7 @@
       <span class="tag">Research Communication</span>
     </p>
 
-    <a class="back-link" href="index.html">← Back to homepage</a>
+    <a class="back-link" href="../index.html">← Back to homepage</a>
   </main>
 </body>
 </html>
