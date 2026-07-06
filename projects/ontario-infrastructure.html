@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ontario Infrastructure Clustering Project | Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.05em;
+      margin-top: 6px;
+    }
+
+    .summary-box {
+      background: #f7f9fc;
+      border: 1px solid #dbe4f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 24px 0;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .result-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .result-card strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.95em;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin: 6px 8px 6px 0;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+
+      table {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="../index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="index.html">General</a>
+            <a href="ai-dependency.html">AI Dependency Survey Research</a>
+            <a href="spss-osslt-regression.html">SPSS &amp; R Regression Analysis</a>
+            <a href="../index.html#aml">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="ontario-infrastructure.html">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="../pages/news.html">News &amp; Ongoing</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Ontario Infrastructure Clustering Project</h1>
+
+    <p class="subtitle">
+      Python clustering analysis and Power BI dashboard for Ontario public infrastructure project data.
+    </p>
+
+    <div class="summary-box">
+      <strong>Project summary:</strong>
+      This project analyzed Ontario public infrastructure projects using Python-based data cleaning/visualization (Also cleaned to double check by Power Query),
+      feature engineering, hierarchical clustering, and Power BI dashboard visualization. The goal was
+      to identify patterns across project category, project status, funding sources, budget, completion year,
+      and location.
+    </div>
+
+    <p>
+      <a class="button-link" href="../files/ontario-infrastructure/Proj_Hierarchical_Final.ipynb">View Python notebook</a>
+      <a class="button-link" href="../files/ontario-infrastructure/Dashboard_Clustering_Ontario_Projects.pbix">View Power BI dashboard file</a>
+      <a class="button-link" href="../files/ontario-infrastructure/Ontario_Project_Dashboard.mp4">Watch dashboard demo video</a>
+    </p>
+
+    <h2>Project Goal</h2>
+    <p>
+      The project uses clustering to group Ontario infrastructure projects with similar characteristics.
+      Instead of only summarizing projects by category or status, the analysis combines multiple features,
+      including funding type, project budget, completion year, location, and project category, to uncover
+      broader patterns in public infrastructure investment.
+    </p>
+
+    <h2>Data and Features</h2>
+    <p>
+      The dataset contains Ontario infrastructure project records. The analysis selected
+      variables that were useful for clustering and visualization while removing columns that introduced
+      excessive noise, null value, or textual detail that was less useful for this clustering workflow.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Feature Group</th>
+          <th>Variables Used</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Project identity</td>
+          <td>Project ID</td>
+          <td>Track individual infrastructure projects.</td>
+        </tr>
+
+        <tr>
+          <td>Project type</td>
+          <td>Category</td>
+          <td>Compare communities, education, roads and bridges, recreation, child care, health care, and transit projects.</td>
+        </tr>
+
+        <tr>
+          <td>Project progress</td>
+          <td>Status, target completion year</td>
+          <td>Identify patterns between complete, planning, and under-construction projects.</td>
+        </tr>
+
+        <tr>
+          <td>Financial information</td>
+          <td>Estimated total budget, municipal/provincial/federal/other funding flags</td>
+          <td>Analyze project size and funding structure.</td>
+        </tr>
+
+        <tr>
+          <td>Spatial information</td>
+          <td>Latitude, longitude</td>
+          <td>Support geographic visualization and GIS mapping.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Python Workflow</h2>
+    <p>
+      The Python notebook follows a complete applied data analysis workflow, starting from raw data cleaning
+      and ending with cluster output preparation for Power BI.
+    </p>
+
+    <ul>
+      <li>Loaded Ontario infrastructure project data into Python.</li>
+      <li>Dropped columns that were too noisy, sparse, or not useful for the clustering objective.</li>
+      <li>Filtered missing or invalid project status, latitude, and longitude values.</li>
+      <li>Cleaned and standardized project completion dates into a target completion year.</li>
+      <li>Converted funding source columns into binary indicators.</li>
+      <li>Performed exploratory checks on category, status, funding, location, and budget variables.</li>
+      <li>Removed outliers before final clustering.</li>
+      <li>Used Gower distance to handle mixed data types.</li>
+      <li>Compared complete and average linkage hierarchical clustering.</li>
+      <li>Selected a final cluster solution and exported the clustered dataset for Power BI.</li>
+    </ul>
+
+    <h2>Clustering Method</h2>
+    <p>
+      The project used hierarchical agglomerative clustering with Gower distance because the dataset contains
+      mixed variable types, including categorical project categories, binary funding flags, numeric budgets,
+      completion years, and geographic coordinates. Complete linkage and average linkage were compared using
+      silhouette scores.
+    </p>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>Gower distance</strong>
+        Used to support mixed numerical, categorical, and binary project features.
+      </div>
+
+      <div class="result-card">
+        <strong>Average linkage</strong>
+        Selected after comparing clustering performance and interpretability.
+      </div>
+
+      <div class="result-card">
+        <strong>5 clusters</strong>
+        Final cluster solution chosen for interpretability.
+      </div>
+
+      <div class="result-card">
+        <strong>Power BI output</strong>
+        Clustered data exported for dashboard visualization.
+      </div>
+    </div>
+
+    <h2>Final Cluster Sizes</h2>
+    <p>
+      The final hierarchical clustering solution grouped projects into five clusters. The clusters were then
+      interpreted using project counts, funding patterns, project categories, status, and average budget.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cluster</th>
+          <th>Number of Projects</th>
+          <th>General Interpretation</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Cluster 1</td>
+          <td>345</td>
+          <td>Smaller cluster with distinct project/funding characteristics.</td>
+        </tr>
+
+        <tr>
+          <td>Cluster 2</td>
+          <td>1,948</td>
+          <td>Largest group, representing a major common pattern among projects.</td>
+        </tr>
+
+        <tr>
+          <td>Cluster 3</td>
+          <td>1,216</td>
+          <td>Second-largest group with another common infrastructure profile.</td>
+        </tr>
+
+        <tr>
+          <td>Cluster 4</td>
+          <td>229</td>
+          <td>Smaller specialized project group.</td>
+        </tr>
+
+        <tr>
+          <td>Cluster 5</td>
+          <td>452</td>
+          <td>Moderate-sized project group with distinguishable funding/category structure.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Key Findings</h2>
+    <ul>
+      <li>
+        Education, health care, and child care projects were often associated with other funding and
+        tended to have higher budgets.
+      </li>
+      <li>
+        Community projects generally had lower budgets and commonly received both federal and municipal funding.
+      </li>
+      <li>
+        Child care and community projects were mostly complete in the cleaned project dataset.
+      </li>
+      <li>
+        Incomplete projects tended to have higher budgets, which is reasonable because large projects may take
+        longer to plan and complete.
+      </li>
+      <li>
+        A larger number of clusters could reveal more detailed patterns, but the five-cluster solution was more
+        interpretable for dashboard communication.
+      </li>
+    </ul>
+
+    <h2>Power BI Dashboard</h2>
+    <p>
+      The clustered dataset was exported into Power BI to create an interactive dashboard. The dashboard was
+      designed to let viewers explore project clusters, categories, funding sources, status, location, and budget
+      patterns visually.
+    </p>
+
+    <p>
+      The dashboard complements the Python notebook by turning the clustering output into a communication-focused
+      project that is easier to explore and present.
+    </p>
+
+    <h2>Incoming GIS Extension</h2>
+    <p>
+      An ArcGIS extension is planned to map the infrastructure project clusters using latitude and longitude data, will be completed in 2026 July.
+    </p>
+
+    <h2>Skills Demonstrated</h2>
+    <p>
+      <span class="tag">Python</span>
+      <span class="tag">Pandas</span>
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Feature Engineering</span>
+      <span class="tag">Hierarchical Clustering</span>
+      <span class="tag">Gower Distance</span>
+      <span class="tag">Silhouette Score</span>
+      <span class="tag">Power BI</span>
+      <span class="tag">Dashboard Design</span>
+      <span class="tag">Excel Power Query</span>
+      <span class="tag">ArcGIS</span>
+    </p>
+
+    <a class="back-link" href="../index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
