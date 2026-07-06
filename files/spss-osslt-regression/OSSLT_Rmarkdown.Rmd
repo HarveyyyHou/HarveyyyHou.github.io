@@ -1,0 +1,1312 @@
+---
+title: "How school type, language, special education services, family income, and parental education level influence OSSLT first attempt results in Ontario schools"
+author: 
+  - Junyi Hou
+date: today
+date-format: long
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+# install.packages("psych")
+# install.packages("knitr")
+# install.packages("kableExtra")
+## install.packages("readxl") 
+#install.packages("car")
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(psych)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+library(gridExtra)
+library(broom)
+library(MuMIn) 
+library(leaps)
+library(car)
+library(glue)
+
+```
+
+
+# Introduction
+
+The Ontario Secondary School English Literacy Test (OSSLT) is mandatory for high school graduation in Ontario, therefore English language learning is a significant focus for both parents and students. This paper aims to investigate how school type, language, special education services, family income, and parental education level influence OSSLT first attempt results in Ontario schools. @zhang2020family found that family income and parental education level significantly contribute to a student’s academic success. Their study was conducted in China, and revealed that higher family income and more advanced parental education are correlated with better student performance. This supports and shapes our hypothesis that students with higher family income and parental education level will perform better on the OSSLT. @bernhofer2022effect showed that students perform better when taught in their first language, which questions if English language school students will perform better on the OSSLT compared to those in non-English language schools. Lastly, @aseery2024enhancing explored how technology and multimedia elements in religious education classes could enhance English language learning. Aseery’s findings suggest that multimedia tools in religious education classes improve student engagement and motivation, which enhances learning outcomes. We would expect schools supplying these technologies in 2025. Therefore, we hypothesize that religious schools will have higher OSSLT pass rates.
+
+While @zhang2020family concluded that higher income and parental education level lead to higher achievement, there are exceptions, as many successful individuals come from lower-income backgrounds. We also expect that students receiving special education services may perform worse on the OSSLT due to specific learning disabilities, despite receiving accommodations. This research question fits well with the concept of multiple linear regression, which examines how multiple predictor variables collaboratively influence a response variable. Therefore, we have selected multiple linear regression as our analysis method. Since the main goal is to observe patterns between variables, this model will focus on interpretability.
+
+This research will benefit those seeking an accurate analysis of the factors that influence English learning outcomes, particularly in the context of the OSSLT. The response variable, OSSLT results, serves as an effective measure of students' English proficiency, as it is both a pass/fail test and provides continuous data.
+
+# Data description
+
+The dataset, available on the Ontario Data Catalogue [@OntarioSchoolData], provides insights into schools in Ontario, supporting policy-making, and educational research. This study repurposes it to investigate and predict the OSSLT first-attempt pass rate. Data were collected from schools, school boards, EQAO, and Statistics Canada through online forms, surveys, phone interviews, and in-person visits, then compiled by Ontario Data Catalogue [@OntarioFindSchool].
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+data <- read.csv("C:/Users/houju/Desktop/Data_Analysis_SelfLearn/STA302 Part 1 Submission/STA302 Part 1 Submission/STA302_original_dataset.csv")
+
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean <- data %>%
+  select(`OSSLT_First_Attempt_PassRate`, 
+         `School.Type`, 
+         `School.Language`, 
+         `Percentage.of.Students.Receiving.Special.Education.Services`, 
+         `Percentage.of.Students.Whose.Parents.Have.No.Degree..Diploma.or.Certificate`,
+         `Percentage.of.School.Aged.Children.Who.Live.in.Low.Income.Households`)
+
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+# Remove any non-numeric characters (e.g., percentage signs, commas)
+df_clean$`OSSLT_First_Attempt_PassRate` <- gsub("[^0-9.]", "", df_clean$`OSSLT_First_Attempt_PassRate`)
+
+# Convert to numeric
+df_clean$`OSSLT_First_Attempt_PassRate` <- as.numeric(df_clean$`OSSLT_First_Attempt_PassRate`)
+
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean <- df_clean %>%
+  mutate(
+    `School.Type` = as.factor(`School.Type`),
+    `School.Language` = as.factor(`School.Language`)
+  )
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean <- df_clean %>%
+  mutate(
+    `OSSLT_First_Attempt_PassRate` = as.numeric(`OSSLT_First_Attempt_PassRate`),
+    `Percentage.of.Students.Receiving.Special.Education.Services` = as.numeric(`Percentage.of.Students.Receiving.Special.Education.Services`),
+    `Percentage.of.School.Aged.Children.Who.Live.in.Low.Income.Households` = as.numeric(`Percentage.of.School.Aged.Children.Who.Live.in.Low.Income.Households`),
+    `Percentage.of.Students.Whose.Parents.Have.No.Degree..Diploma.or.Certificate` = as.numeric(`Percentage.of.Students.Whose.Parents.Have.No.Degree..Diploma.or.Certificate`)
+  )
+
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean <- df_clean %>%
+  filter(
+    !is.na(`OSSLT_First_Attempt_PassRate`) &
+    !is.na(`Percentage.of.Students.Receiving.Special.Education.Services`) &
+    !is.na(`Percentage.of.School.Aged.Children.Who.Live.in.Low.Income.Households`) &
+    !is.na(`Percentage.of.Students.Whose.Parents.Have.No.Degree..Diploma.or.Certificate`)
+  )
+
+# Rename variables in the whole data frame
+df_clean <- df_clean %>%
+  rename(
+    School_Type = School.Type,
+    School_Language = School.Language,
+    Special_Ed_Pct = Percentage.of.Students.Receiving.Special.Education.Services,
+    Low_Income_Pct = Percentage.of.School.Aged.Children.Who.Live.in.Low.Income.Households,
+    No_Parent_Degree_Pct = Percentage.of.Students.Whose.Parents.Have.No.Degree..Diploma.or.Certificate
+  )
+
+```
+
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+write.csv(df_clean, "cleaned_data_school.csv", row.names = FALSE)
+```
+
+The `OSSLT_First_Attempt_PassRate`, the response variable, measures the percentage of students passing Ontario Secondary School Literacy Test on their first attempt, ranging from 0 to 100. The mean of 82.45 and median of 85 indicate high pass rates. The dataset originally had 4,926 observations, reduced to 737 after cleaning, ensuring statistical reliability. Despite being bounded, the pass rate is continuous, suitable for linear regression.
+
+```{r}
+#| label: tbl-passrate
+#| tbl-cap: "OSSLT First Attempt Pass Rate Descriptive Statistics"
+#| echo: false
+
+df_clean <- read.csv("C:/Users/houju/Desktop/Data_Analysis_SelfLearn/STA302 Part 1 Submission/STA302 Part 1 Submission/cleaned_data_school.csv")
+
+
+summary_table <- describe(df_clean %>% select(`OSSLT_First_Attempt_PassRate`)) %>%  
+  select(-vars) %>%  
+  mutate(across(where(is.numeric), ~ round(., 2)))  
+
+summary_table %>%  
+  kable(
+    digits = 2, 
+    align = "c", 
+    format = "latex",  
+    booktabs = TRUE,  
+    caption.short = ""  
+  ) %>%  
+  kable_styling(
+    latex_options = c("striped", "scale_down"),  
+    bootstrap_options = c("striped", "hover", "condensed"),  
+    font_size = 12  
+  ) %>%  
+  column_spec(1, bold = TRUE, width = "5cm") %>%  
+  column_spec(2:min(ncol(summary_table), 5), width = "2cm")
+
+```
+
+
+
+
+```{r}
+#| label: tbl-histograms
+#| tbl-cap: "Histograms for Selected Predictors"
+#| echo: false
+
+# Create individual scatter plots
+plot1 <- ggplot(df_clean, aes(x = School_Type)) +
+  geom_bar(fill = "blue") +
+  labs(title = "School Type Count", x = "School Type", y = "Count") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 9, face = "bold"))
+
+plot2 <- ggplot(df_clean, aes(x = School_Language)) +
+  geom_bar(fill = "red") +
+  labs(title = "School Language Count", x = "School Language", y = "Count") +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 9, face = "bold"))
+
+# Create scatter plots for continuous variables (distribution)
+plot3 <- ggplot(df_clean, aes(x = Special_Ed_Pct)) +
+  geom_histogram(fill = "lightgreen", bins = 30) +
+  labs(title = "Special Education Services", x = "Percentage", y = "Count") +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+
+plot4 <- ggplot(df_clean, aes(x = Low_Income_Pct)) +
+  geom_histogram(fill = "purple", bins = 30) +
+  labs(title = "Low-Income Households", x = "Percentage", y = "Count") +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 9, face = "bold"))
+
+plot5 <- ggplot(df_clean, aes(x = No_Parent_Degree_Pct)) +
+  geom_histogram(fill = "orange", bins = 30) +
+  labs(title = "Parents Without Post-Secondary (%)", x = "Percentage", y = "Count") +
+  theme_minimal()+ 
+  theme(plot.title = element_text(size = 9, face = "bold"))
+
+
+# Arrange plots in a 3x2 layout
+grid.arrange(plot1, plot2, plot3, plot4, plot5, ncol = 3, nrow = 2)
+```
+
+School Type is categorical, with two types: Catholic and Public. Most schools are public. @cheema2024difference noted, private schools generally outperform public schools in literacy. We expect Catholic schools to have higher OSSLT pass rates due to structured curriculum and discipline.
+
+School Language is binary, English or  French. Most schools operate in English, which is expected to correlate with higher OSSLT pass rates.
+
+Students receiving special education services often exhibit lower literacy achievement and slower progress, as noted by @vaughn2014intensive. Our model aims to capture this pattern. The mean of this predictor variable is 24.07%, with a median of 22%, includes outliers where 100% of students receive special education services.
+
+The percentage of school-aged children in low-income households has a mean of 15.27% and skewness of 0.88, indicating some schools have significantly higher concentrations. As @nadeem2021study found, lower-income students often have lower literacy skills, which we expect to correlate with lower OSSLT pass rates.
+
+The percentage of students whose parents lack post-secondary credentials averages 6.76%, with skewness of 1.56 and kurtosis of 3.73, suggesting a slight right skew. As @davis2021role states, parental education influences children’s academic success, making this a relevant predictor.
+
+# Preliminary results
+
+```{r}
+#| label: table-regression
+#| tbl-cap: Regression Preliminary Results
+#| echo: false
+
+# Fit the linear model
+model <- lm(OSSLT_First_Attempt_PassRate ~ 
+              School_Type + 
+              School_Language + 
+              Special_Ed_Pct + 
+              Low_Income_Pct + 
+              No_Parent_Degree_Pct,
+            data = df_clean)
+
+# Create a summary table
+summary_df <- data.frame(
+  Coefficient = coef(model),
+  Standard_Error = summary(model)$coefficients[, "Std. Error"],
+  t_Statistic = summary(model)$coefficients[, "t value"],
+  p_Value = summary(model)$coefficients[, "Pr(>|t|)"]
+)
+
+# Display the table using kable
+kable(summary_df, digits = 3)
+
+```
+
+## Residual Analysis
+
+### Linear Models Assumptions:
+
+1. **Linearity**  
+$$
+E(Y_i|X = \mathbf{x}_i) = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}
+$$
+
+2. **Constant Error Variance (Homoscedasticity)**  
+$$
+Var(Y_i|X = \mathbf{x}_i) = \sigma^2
+$$
+
+3. **Uncorrelated and Normal Errors**  
+$$
+Cov(e_i, e_j) = 0 \text{ for } i \neq j \text{ and } e_i \sim N(0, \sigma^2)
+$$
+
+
+### Assumption Check
+
+
+```{r residual-plots}
+#| label: plot-residuals
+#| fig-cap: Residual Plots
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+par(mfrow = c(1, 3))  # Arrange plots in one row
+
+# Residuals vs Fitted
+plot(model$fitted.values, resid(model), main="Residuals vs Fitted", 
+     xlab="Fitted Values", ylab="Residuals", pch=20)
+abline(h=0, col="red")
+
+# Q-Q Plot
+qqnorm(resid(model), main="Q-Q Plot")
+qqline(resid(model), col="red")
+
+# Histogram of Residuals
+hist(resid(model), main="Histogram of Residuals", 
+     xlab="Residuals", col="gray", border="white")
+```
+
+
+1. **Linearity & Homoscedasticity:** 
+  The residuals vs. fitted plot shows no clear pattern, suggesting linearity. Slight heteroscedasticity is observed.
+
+2. **Normality:** 
+  The Q-Q plot and the histogram of residuals suggest residuals are approximately normal, though slight deviations exist at the left tail.
+
+3. **Independence:** 
+  No evident pattern in the residual plot suggests residuals are independent.
+
+## Model Interpretation & Discussion
+
+### Key Findings and interpretation
+
+- The **intercept (105.18)** represents the estimated pass rate for a **Catholic, English-language school with 0% special education, 0% low-income students, and 0% students whose parents have no degree**. This provides a reference point for understanding the model’s predictions.
+
+- **School Language (French vs. English)** and the three numeric variables (**Special_Ed_Pct, Low_Income_Pct, No_Parent_Degree_Pct**) are strongly associated with the **OSSLT pass rate**.
+
+- **School Type (Public vs. Catholic)** does not show a statistically significant difference in pass rate in this model.
+
+- Higher proportions of **special education students, low-income students, and students whose parents have no degree** are each associated with a **lower pass rate**.
+
+- Conversely, being a **French-language school** is associated with a **higher pass rate** relative to the English.
+
+- The model explains **54% of the variation in pass rates**, which is reasonable for educational data, suggesting these variables collectively have a substantial but not complete ability to predict pass rates.
+
+### Comparison to Literature
+
+Our findings align with prior research while offering insights specific to Ontario:
+
+- **Family Income & Parental Education:** Consistent with @zhang2020family, our results confirm that higher family income and parental education correlate with better OSSLT pass rates.
+
+- **School Language:** Contrary to @bernhofer2022effect, our study shows French-language schools had higher OSSLT pass rates than English-language schools, indicating other factors like curriculum or funding may play a role. Further investigation is needed.
+
+- **Special Education:** Higher proportions of special education students negatively impact OSSLT success, aligning with expectations.
+
+- **School Type:** No significant difference was found between public and Catholic schools, despite @aseery2024enhancing suggesting that religious schools may benefit from enhanced multimedia learning tools.
+
+
+
+```{r}
+#| label: tbl-predictors
+#| tbl-cap: "Descriptive Statistics for Selected Predictors"
+#| echo: false
+
+
+# Create the summary table using the renamed columns
+summary_table <- describe(df_clean %>% 
+  select(School_Type, 
+         School_Language, 
+         Special_Ed_Pct, 
+         Low_Income_Pct, 
+         No_Parent_Degree_Pct)) %>%
+  mutate(across(where(is.numeric), ~ round(., 2)))  # Round numeric values to 2 decimal places
+
+
+summary_table %>%  
+  kable(
+    digits = 2, 
+    align = "c", 
+    format = "latex",  
+    booktabs = TRUE,  
+    caption.short = ""  
+  ) %>%  
+  kable_styling(
+    latex_options = c("striped", "scale_down"),  
+    bootstrap_options = c("striped", "hover", "condensed"),  
+    font_size = 12  
+  ) %>%  
+  column_spec(1, bold = TRUE, width = "5cm") %>%  
+  column_spec(2:min(ncol(summary_table), 5), width = "2cm")
+
+```
+
+# Model Selection
+## Response Variable Transformation
+After fitting our original model, we consider some transformations. The first method is Box Cox, which uses maximum likelihood to choose transformation so the residuals are approximately normally distributed. We found 2 as Box Cox lambda, suggesting squared transformation. Therefore we Try $Y^2$ Transformation, we also tried many other transformations such as $1/Y$, and decided to display log and square root as they improved from original model.
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean$OSSLT_First_Attempt_PassRate = df_clean$OSSLT_First_Attempt_PassRate +0.001
+
+model <- lm(OSSLT_First_Attempt_PassRate ~ 
+             School_Type + 
+             School_Language + 
+             Special_Ed_Pct + 
+             Low_Income_Pct + 
+             No_Parent_Degree_Pct, 
+             data = df_clean)
+library(car)
+library(MASS)
+boxcox_result <- boxcox(model, plotit = FALSE)  # Plot to find optimal 
+lambda <- boxcox_result$x[which.max(boxcox_result$y)]
+lambda
+```
+
+### Response Variable Transformation and Assumption Comparison
+Normality: The Q-Q plot of residuals suggest residuals are approximately normal for square root and log, though slight deviations exist at the left tail. Note that the scale for the Square root graph is a lot bigger, minimal deviation indicates violation.
+```{r residual-plots}
+#| label: Response Variable Transformation Preview with QQ
+#| fig-cap: Residual Plots
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+
+df_clean$OSSLT_Transform = log(df_clean$OSSLT_First_Attempt_PassRate+0.001)
+model_transformed <- lm(OSSLT_Transform ~ School_Type + School_Language + 
+                       Special_Ed_Pct + Low_Income_Pct + No_Parent_Degree_Pct, 
+                       data = df_clean)
+df_clean$OSSLT_Sqrt = sqrt(df_clean$OSSLT_First_Attempt_PassRate)
+model_sqrt <- lm(OSSLT_Sqrt ~ School_Type + School_Language + 
+                       Special_Ed_Pct + Low_Income_Pct + No_Parent_Degree_Pct, 
+                       data = df_clean)
+df_clean$OSSLT_Square = (df_clean$OSSLT_First_Attempt_PassRate)^2
+model_square <- lm(OSSLT_Square ~ School_Type + School_Language + 
+                       Special_Ed_Pct + Low_Income_Pct + No_Parent_Degree_Pct, 
+                       data = df_clean)
+
+
+p1 <- ggplot(data.frame(resid = resid(model)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Q-Q plot for the log-transformed model
+p2 <- ggplot(data.frame(resid = resid(model_transformed)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of Residuals (Log)") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Q-Q plot for the sqrt-transformed model
+p3 <- ggplot(data.frame(resid = resid(model_sqrt)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of Residuals (Sqrt)") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Q-Q plot for the squared-transformed model
+p4 <- ggplot(data.frame(resid = resid(model_square)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of Residuals (Square)") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+
+# summary(model_transformed)
+```
+
+
+### Response Variable Transformation Preview with Residuals
+Linearity & Homoscedasticity: The Square Root residuals vs. fitted plot is ideal, as the Y scale range is a lot smaller than other transformations and there is no clear patterns. This suggest linearity. Slight heteroscedasticity is observed around x=-10.
+```{r residual-plots}
+#| label: Response Variable Transformation Preview with Residuals
+#| fig-cap: Residual Plots
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+# Create individual ggplots
+p1 <- ggplot(data.frame(Fitted = model$fitted.values, Residuals = resid(model)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "blue", size = 1) +
+  ggtitle("Original Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p2 <- ggplot(data.frame(Fitted = model_transformed$fitted.values, Residuals = resid(model_transformed)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("Log-Transformed Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p3 <- ggplot(data.frame(Fitted = model_sqrt$fitted.values, Residuals = resid(model_sqrt)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "darkgreen", size = 1) +
+  ggtitle("Sqrt-Transformed Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data.frame(Fitted = model_square$fitted.values, Residuals = resid(model_square)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "purple", size = 1) +
+  ggtitle("Square-Transformed Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+
+```
+
+
+### Response Variable Transformation Metrics and Decision
+We eliminate Square(Y) since the model performs worse. Square Root and Log Transformation both rapidly improve from the original model based on AIC and BIC. However, $R^2$ dropped by approximately 34% compared to original for Log, indicating log model's ability to explain variance significantly decreased. In contrast, Square Root Model $R^2$ only decreased by less than 2% for better Normality, linearity and Homoscedasticity. The difference in AIC and between Log and Square Root is not significant enough to replace $R^2$. Therefore, we apply square root transformation.
+```{R}
+#| label: Y Transformation Decision
+#| tbl-cap: "R^2, AIC, BIC"
+#| echo: false
+
+# AIC & BIC for each model
+AIC_original <- AIC(model)
+AIC_log <- AIC(model_transformed)
+AIC_sqrt <- AIC(model_sqrt)
+AIC_square <- AIC(model_square)
+
+BIC_original <- BIC(model)
+BIC_log <- BIC(model_transformed)
+BIC_sqrt <- BIC(model_sqrt)
+BIC_square <- BIC(model_square)
+
+# Adjusted R-squared values
+Ori_R <- summary(model)$adj.r.squared
+Log_R <- summary(model_transformed)$adj.r.squared
+Sqrt_R <- summary(model_sqrt)$adj.r.squared
+Square_R <- summary(model_square)$adj.r.squared
+
+# Combine into a table
+ytransform_comparison <- data.frame(
+  Model = c("Original", "Log-Transformed", "Sqrt-Transformed", "Square"),
+  R_Squared = c(Ori_R, Log_R, Sqrt_R, Square_R),
+  AIC = c(AIC_original, AIC_log, AIC_sqrt, AIC_square),
+  BIC = c(BIC_original, BIC_log, BIC_sqrt, BIC_square)
+)
+
+# Print as a formatted table
+kable(ytransform_comparison, digits = 4, caption = "Model Comparison Based on Y-Transformations")
+
+
+```
+
+### Y transformed model summary, VIF and Confidence Interval
+The confidence interval contains 0 and p value > 0.05 for School_Type, suggest dropping this predictor. Variance Inflation Factors > 5 for all, indicating no predictor have issues with multicollinearity.
+```{r}
+#| label: VIF, Confidence Interval and Summary
+#| tbl-cap: "VIF, Confidence Interval and Summary"
+#| echo: false
+# Tidy model output
+coef_table <- tidy(model_sqrt)
+
+# Confidence intervals
+confint_df <- confint(model_sqrt) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("term") %>%
+  rename(`Lower 95% CI` = `2.5 %`, `Upper 95% CI` = `97.5 %`)
+
+# VIFs from model
+raw_vifs <- vif(model_sqrt)
+
+# Expand VIFs to match dummy-coded names
+expanded_vif <- coef_table %>%
+  dplyr::select(term) %>%
+  dplyr::mutate(
+    base_var = dplyr::case_when(
+      grepl("^School_Type", term) ~ "School_Type",
+      grepl("^School_Language", term) ~ "School_Language",
+      term == "Special_Ed_Pct" ~ "Special_Ed_Pct",
+      term == "Low_Income_Pct" ~ "Low_Income_Pct",
+      term == "No_Parent_Degree_Pct" ~ "No_Parent_Degree_Pct",
+      TRUE ~ NA_character_
+    ),
+    VIF = raw_vifs[base_var]
+  ) %>%
+  dplyr::select(term, VIF)
+
+# Merge all
+full_table <- coef_table %>%
+  left_join(confint_df, by = "term") %>%
+  left_join(expanded_vif, by = "term")
+
+# Format values
+full_table <- full_table %>%
+  mutate(
+    `t value` = formatC(statistic, format = "f", digits = 2),
+    `Pr(>|t|)` = format.pval(p.value, digits = 3, eps = .Machine$double.eps),
+    Estimate = formatC(estimate, format = "f", digits = 4),
+    `Std. Error` = formatC(std.error, format = "f", digits = 4),
+    `Lower 95% CI` = formatC(`Lower 95% CI`, format = "f", digits = 4),
+    `Upper 95% CI` = formatC(`Upper 95% CI`, format = "f", digits = 4),
+    VIF = ifelse(is.na(VIF), "", formatC(VIF, format = "f", digits = 2))
+  )
+
+# Rename terms for final display
+full_table <- full_table %>%
+  mutate(term = case_when(
+    term == "(Intercept)" ~ "(Intercept)",
+    term == "School_TypePublic" ~ "School Type - Public",
+    term == "School_LanguageFrench" ~ "School Language - French",
+    term == "Special_Ed_Pct" ~ "% in Special Education",
+    term == "Low_Income_Pct" ~ "% in Low Income",
+    term == "No_Parent_Degree_Pct" ~ "% in No Education - Parent",
+    TRUE ~ term
+  ))
+
+# Display final compact table
+full_table[, c("term", "Estimate", "Std. Error", "t value", "Pr(>|t|)",
+               "Lower 95% CI", "Upper 95% CI", "VIF")] %>%
+  kable(
+    col.names = c("Predictor", "Est.", "SE", "t", "p", "CI Low", "CI High", "VIF"),
+    caption = "Regression Coefficients (Compact View)",
+    escape = FALSE,
+    booktabs = TRUE,
+    align = "lccccccc"
+  ) %>%
+  kable_styling(
+    latex_options = c("striped", "hold_position", "threeparttable"),
+    font_size = 7  # Smallest readable font
+  ) %>%
+  column_spec(1, width = "3cm", bold = TRUE) %>%
+  column_spec(2:8, width = "1.1cm") %>%
+  row_spec(0, bold = TRUE)
+
+
+```
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+df_clean$Sp_Ed_Transform = (df_clean$Special_Ed_Pct)^2
+df_clean$Low_Income_Transform = (df_clean$Low_Income_Pct)
+df_clean$No_Edu_Transform = (df_clean$No_Parent_Degree_Pct)
+model_Transformwith_x <- lm(OSSLT_Sqrt ~ School_Type + School_Language + Special_Ed_Pct + Sp_Ed_Transform + Low_Income_Transform + No_Edu_Transform, data = df_clean)
+
+model_OneLessPredictor <- lm(OSSLT_Sqrt ~ School_Language + Special_Ed_Pct + Low_Income_Transform + No_Edu_Transform + Sp_Ed_Transform, data = df_clean)
+
+model_drop_No_Add <- lm(OSSLT_Sqrt ~ School_Language + Special_Ed_Pct + Low_Income_Transform + No_Edu_Transform, data = df_clean)
+
+```
+## X Transformation
+
+### X Transformation Assumption Preview
+
+Other than dropping School Type, we also consider X transformation. After testing different combinations of X transformations and interactions, we found that adding a squared special education term increase model performance. Therefore we compare four models: Original with Sqrt(Y), remove school type, add squared special education, and both remove and add. All X transformations models shows similar residual plots. 
+
+```{R}
+#| label: QQ Plot
+#| fig-cap: "QQ of all possible X Transformation"
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+p2 <- ggplot(data.frame(resid = resid(model_sqrt)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of Residuals (sqrt)") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p3 <- ggplot(data.frame(resid = resid(model_Transformwith_x)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Add Squared Special EDU") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data.frame(resid = resid(model_OneLessPredictor)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Drop School Type, Add Squared Spec EDU") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p5 <- ggplot(data.frame(resid = resid(model_drop_No_Add)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Drop School Type") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+grid.arrange( p2, p3, p4, p5, ncol = 2)
+
+```
+
+```{r residual-plots}
+#| label: X Transformation Residual Plots
+#| fig-cap: Residual Plots
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+p2 <- ggplot(data.frame(Fitted = model_sqrt$fitted.values, Residuals = resid(model_sqrt)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("Sqrt Transformed only Y Residuals") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p3 <- ggplot(data.frame(Fitted = model_Transformwith_x$fitted.values, Residuals = resid(model_Transformwith_x)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("With Polynomial Term On Spec EDU") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data.frame(Fitted = model_OneLessPredictor$fitted.values, Residuals = resid(model_OneLessPredictor)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("Removing School Type with extra Term") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+p5 <- ggplot(data.frame(Fitted = model_drop_No_Add$fitted.values, Residuals = resid(model_drop_No_Add)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("Removing School Type") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+grid.arrange(p2, p3, p4, p5, ncol = 2)
+```
+
+
+### Predictor Transformation Metrics and Decision
+$R^2$, AIC, BIC, RSS, F and P value all improved for models that has the Squared Special Education predictor. For models where we drop school type, all metrics does not differ by much, indicating this predictor has minimal impact on the model. Finally, we can conclude the final model with 5 Predictors: School Language, Special Education Proportion, Special Education Squared, Low Income Proportion, Parents with minimal education proportion.
+```{R}
+#| label: Predictor Transformation Decision
+#| tbl-cap: "Predictor Transformation Decision"
+#| echo: false
+# AIC, BIC, and R-squared values for each model
+AIC_values <- c(
+  AIC(model_sqrt),
+  AIC(model_Transformwith_x),
+  AIC(model_OneLessPredictor),
+  AIC(model_drop_No_Add)
+)
+
+BIC_values <- c(
+  BIC(model_sqrt),
+  BIC(model_Transformwith_x),
+  BIC(model_OneLessPredictor),
+  BIC(model_drop_No_Add)
+)
+
+R_squared <- c(
+  summary(model_sqrt)$adj.r.squared,
+  summary(model_Transformwith_x)$adj.r.squared,
+  summary(model_OneLessPredictor)$adj.r.squared,
+  summary(model_drop_No_Add)$adj.r.squared
+)
+
+# Create comparison table
+xtransform_comparison <- data.frame(
+  Model = c("Original (Y) Transformed", "X Transform", "X Transform with One Less Predictor", "One Less Predictor"),
+  R_Squared = R_squared,
+  AIC = AIC_values,
+  BIC = BIC_values
+)
+
+# Print as a formatted table using kable
+kable(xtransform_comparison, digits = 4, caption = "Model Comparison Based on Transformations")
+
+```
+
+```{R}
+#| label: Anova F score for X Transformation
+#| tbl-cap: "Anova F score for X Transformation"
+#| echo: false
+# List of models
+models <- list(
+  Transformwith_x = model_Transformwith_x,
+  OneLessPredictor = model_OneLessPredictor,
+  drop_No_Add = model_drop_No_Add,
+  Originalsqrt = model_sqrt
+)
+
+# Extract model statistics
+model_stats <- lapply(names(models), function(name) {
+  model <- models[[name]]
+  summary_model <- summary(model)
+  fstat <- summary_model$fstatistic
+  f_value <- fstat[1]
+  df1 <- fstat[2]
+  df2 <- fstat[3]
+  p_val <- pf(f_value, df1, df2, lower.tail = FALSE)
+  rss <- sum(residuals(model)^2)
+  
+  data.frame(
+    Model = name,
+    F_statistic = f_value,
+    df1 = df1,
+    df2 = df2,
+    p_value = format(p_val, scientific = TRUE),  # 💡 This is the key fix!
+    RSS = rss
+  )
+})
+
+# Combine and display
+results_df <- do.call(rbind, model_stats)
+
+kable(results_df, caption = "Model Statistics Comparison")
+
+```
+
+## Outlier Detection and Removal
+To detect outliers, influential and leverage points. We tested observation for standardized and studentized residual for outliers; hat for leverage points; DFFITS, DFBETAS and Cook's Distance for influential points.
+
+These columns (211, 385, 102, 118, 225, 484, 486, 488, 533) appear under several different tests, After observing their plot, we confirm to fit the model removing these.
+```{R}
+#| include: false
+#| warning: false
+#| message: false
+# Fit your model
+model <- model_OneLessPredictor
+
+# ----------------------------
+# 1. Residual Diagnostics
+# ----------------------------
+# Standardized residuals (for |r_i| > 4)
+standardized_resid <- rstandard(model)
+std_resid_outliers <- which(abs(standardized_resid) > 4)
+
+# Studentized residuals (for |rstudent| > 3)
+rstudent <- rstudent(model)
+student_resid_outliers <- which(abs(rstudent) > 3)
+
+# ----------------------------
+# 2. Leverage and Influence Metrics
+# ----------------------------
+# Leverage (hat values)
+hat_values <- hatvalues(model)
+leverage_threshold <- 2 * (length(coef(model)) + 1) / nobs(model)
+high_leverage <- which(hat_values > leverage_threshold)
+
+# Cook's distance
+cooks_d <- cooks.distance(model)
+cooks_threshold <- 4 / nobs(model)
+influential_cooks <- which(cooks_d > cooks_threshold)
+
+# DFFITS
+dffits_val <- dffits(model)
+dffits_threshold <- 2 * sqrt(length(coef(model)) / nobs(model))
+high_dffits <- which(abs(dffits_val) > dffits_threshold)
+
+# DFBETAS
+dfbetas_val <- dfbetas(model)
+dfbetas_threshold <- 2 / sqrt(nobs(model))
+high_dfbetas <- which(apply(abs(dfbetas_val), 1, max) > dfbetas_threshold)
+
+# ----------------------------
+# 3. Print Results
+# ----------------------------
+cat("=== Outliers ===\n")
+cat("Standardized residuals (|r_i| > 4):", std_resid_outliers, "\n")
+cat("Studentized residuals (|rstudent| > 3):", student_resid_outliers, "\n\n")
+
+cat("=== Influence Metrics ===\n")
+cat("High Leverage (Hat >", round(leverage_threshold, 3), "):", high_leverage, "\n")
+cat("Influential (Cook's D >", round(cooks_threshold, 3), "):", influential_cooks, "\n")
+cat("High DFFITS (>", round(dffits_threshold, 3), "):", high_dffits, "\n")
+cat("High DFBETAS (>", round(dfbetas_threshold, 3), "):", high_dfbetas, "\n")
+
+# ----------------------------
+# 4. Visualization
+# ----------------------------
+par(mfrow = c(2, 2))
+
+# Standardized Residuals Plot
+plot(standardized_resid, pch = 20, 
+     main = "Standardized Residuals (|r_i| > 4)", 
+     ylab = "Standardized Residuals")
+abline(h = c(-4, 4), col = "red", lty = 2)
+
+# Leverage vs. Standardized Residuals
+plot(hat_values, standardized_resid, pch = 20,
+     main = "Leverage vs. Standardized Residuals",
+     xlab = "Leverage (Hat Values)", ylab = "Standardized Residuals")
+abline(h = c(-4, 4), col = "red", lty = 2)
+abline(v = leverage_threshold, col = "blue", lty = 2)
+
+# Cook's Distance
+plot(cooks_d, pch = 20, main = "Cook's Distance")
+abline(h = cooks_threshold, col = "red", lty = 2)
+
+# DFBETAS for the most affected predictor
+most_affected_pred <- which.max(apply(abs(dfbetas_val), 2, max))
+plot(dfbetas_val[, most_affected_pred], pch = 20,
+     main = paste("DFBETAS for", names(coef(model))[most_affected_pred]),
+     ylab = "DFBETAS")
+abline(h = c(-dfbetas_threshold, dfbetas_threshold), col = "red", lty = 2)
+```
+
+```{r}
+#| label: Outlier Detection and Removal
+#| tbl-cap: "Outlier Detection and Removal"
+#| echo: false
+# Create data frame with outlier information
+outlier_table <- data.frame(
+  Observation = c(211, 385, 102, 118, 225, 484, 486, 488, 533),
+  Std_Residuals = c("Yes (Extreme residual)", "Yes (Extreme residual)", "-", "-", "-", "-", "-", "-", "-"),
+  Studentized_Residuals = c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+  High_Leverage = c("Yes", "Yes", "Yes", "Yes", "Yes", "-", "-", "-", "-"),
+  High_Cooks_D = c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+  High_DFFITS = c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+  High_DFBETAS = c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"),
+  Priority = c("Highest (Extreme residual + all influence metrics)",
+               "Highest (Extreme residual + all influence metrics)",
+               "Very High (Studentized residual + all influence metrics)",
+               "Very High (Studentized residual + all influence metrics)",
+               "Very High (Studentized residual + all influence metrics)",
+               "High (Studentized residual + influential)",
+               "High (Studentized residual + influential)",
+               "High (Studentized residual + influential)",
+               "High (Studentized residual + influential)")
+)
+
+kable(outlier_table,
+      col.names = c("Observation", "Std. Residuals", 
+                    "Studentized", 
+                    "Leverage", "Cook's D", 
+                    "DFFITS", "DFBETAS", "Priority"),
+      align = "cccccccl",
+      caption = "Outlier and Influence Diagnostics") %>%
+  kable_styling(
+    latex_options = c("striped", "hold_position", "threeparttable"),
+    bootstrap_options = c("striped", "condensed", "hover", "responsive"),
+    full_width = FALSE,
+    font_size = 8
+  ) %>%
+  column_spec(1:7, width = "1.2cm") %>%
+  column_spec(8, width = "5cm", italic = TRUE)
+
+
+
+```
+
+### Assess Model Performance after removing outlier
+AIC, BIC, $R^2$, F score, RSS all improved after removing outliers, so we conclude the removing outlier process.
+```{R}
+#| label: Assess Model Performance after removing outlier
+#| tbl-cap: "Assess Model Performance after removing outlier"
+#| echo: false
+# Fit the cleaned model
+model_clean <- update(model_OneLessPredictor, subset = -c(211, 385, 102, 118, 225, 484, 486, 488, 533))
+
+# Collect AIC and BIC values
+AIC_values <- c(AIC(model_OneLessPredictor), AIC(model_clean))
+BIC_values <- c(BIC(model_OneLessPredictor), BIC(model_clean))
+
+# Adjusted R-squared values
+R_squared <- c(
+  summary(model_OneLessPredictor)$adj.r.squared,
+  summary(model_clean)$adj.r.squared
+)
+
+# F-statistic values only (not full object)
+F_values <- c(
+  summary(model_OneLessPredictor)$fstatistic[1],
+  summary(model_clean)$fstatistic[1]
+)
+
+# RSS values
+RSS_values <- c(
+  sum(residuals(model_OneLessPredictor)^2),
+  sum(residuals(model_clean)^2)
+)
+
+# Create final comparison table
+Final_comparison <- data.frame(
+  Model = c("All-Transformed", "Outliers Removed"),
+  R_Squared = R_squared,
+  AIC = AIC_values,
+  BIC = BIC_values,
+  F_statistic = F_values,
+  RSS = RSS_values
+)
+
+# Print the results as a formatted table using kable
+kable(Final_comparison, digits = c(0, 4, 2, 2, 4, 4), caption = "Model Comparison with AIC, BIC, R-Squared, F-statistic, and RSS")
+
+
+```
+
+
+### QQ Plot and Residual final comparsion
+Both graphs improved with no outliers near the bounds, less Deviation observed on the left.
+```{r residual-plots}
+#| label: QQ Plot and Residual comparsion
+#| fig-cap: Residual Plots
+#| echo: false
+p2 <- ggplot(data.frame(Fitted = model_OneLessPredictor$fitted.values, Residuals = resid(model_OneLessPredictor)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("Before Removing Outlier") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Residual vs Fitted (After outlier removal)
+p3 <- ggplot(data.frame(Fitted = model_clean$fitted.values, Residuals = resid(model_clean)), 
+             aes(Fitted, Residuals)) +
+  geom_point(color = "red", size = 1) +
+  ggtitle("After Removing Outlier") +
+  ylim(-6.25, 2.5) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Q-Q plot before outlier removal
+p4 <- ggplot(data.frame(resid = resid(model_OneLessPredictor)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ggtitle("Q-Q Plot of One Less Predictor") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+# Q-Q plot after outlier removal
+p5 <- ggplot(data.frame(resid = resid(model_clean)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  ylim(-6.25, 2.5) +
+  ggtitle("Q-Q Plot After Removing Outlier") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 7),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    panel.grid = element_blank()
+  )
+
+
+grid.arrange( p2, p3, p4, p5, ncol = 2)
+```
+# Final model inference and results
+
+$$
+\begin{aligned}
+\sqrt{\text{OSSLT}} =\ & \beta_0 + \beta_1 \cdot \text{School Language} + \beta_2 \cdot \text{\% in Special Education} \\
+& + \beta_3 \cdot \text{\% in Low Income} + \beta_4 \cdot \text{\% in No Education Parents} \\
+& + \beta_5 \cdot \text{\% in Special Education (Squared)} + \varepsilon
+\end{aligned}
+$$
+
+
+```{r}
+#| tbl-cap: Regression Coeﬀicients with 95% Confidence Interval
+#| label: tbl-final-model-regression-coefficient
+#| echo: false
+# Tidy model output
+coef_table <- tidy(model_clean)
+
+# Confidence intervals
+confint_df <- confint(model_clean) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("term") %>%
+  rename(`Lower 95% CI` = `2.5 %`, `Upper 95% CI` = `97.5 %`)
+
+# Merge all
+final_table <- coef_table %>%
+  left_join(confint_df, by = "term")
+
+# Format values
+final_table <- final_table %>%
+  mutate(
+    `t value` = formatC(statistic, format = "f", digits = 2),
+    `Pr(>|t|)` = format.pval(p.value, digits = 3, eps = .Machine$double.eps),
+    Estimate = formatC(estimate, format = "f", digits = 4),
+    `Std. Error` = formatC(std.error, format = "f", digits = 4),
+    `Lower 95% CI` = formatC(`Lower 95% CI`, format = "f", digits = 4),
+    `Upper 95% CI` = formatC(`Upper 95% CI`, format = "f", digits = 4)
+  )
+
+# Rename terms
+final_table <- final_table %>%
+  mutate(term = case_when(
+    term == "(Intercept)" ~ "(Intercept)",
+    term == "School_LanguageFrench" ~ "School Language - French",
+    term == "Special_Ed_Pct" ~ "% in Special Education",
+    term == "Low_Income_Transform" ~ "% in Low Income",                # <-- updated
+    term == "No_Edu_Transform" ~ "% in No Education Parents",          # <-- updated
+    term == "Sp_Ed_Transform" ~ "% in Special Education Squared",
+    TRUE ~ term
+  ))
+
+
+# Create the kable table
+final_table[, c("term", "Estimate", "Std. Error", "t value", "Pr(>|t|)", "Lower 95% CI", "Upper 95% CI")] %>%
+  kable(
+    col.names = c("Predictor", "Est.", "SE", "t", "p", "Lower CI", "Upper CI"),
+    escape = FALSE,
+    booktabs = TRUE,
+    align = "lcccccc"
+  ) %>%
+  kable_styling(
+    latex_options = c("striped", "hold_position", "repeat_header"), 
+    font_size = 7
+  ) %>%
+  column_spec(1, width = "3cm") %>%
+  column_spec(2:7, width = "1.1cm")
+```
+
+## Model Interpretation 
+
+Our final model results presented in **Table 11** provide meaningful insight into how school and family level factors influence OSSLT first attempt success rates in Ontario. No confidence interval includes zero and no p-value is larger than 0.05(supported by large values in t test), this indicates all our predictors in the model are valid for interpretation. Note that School Language has the highest standard error among our predictors(although still small and acceptable), small standard errors suggest coefficient estimates with minimal variability.
+
+Among the school characteristics, the language of instruction stands out as a significant predictor: schools offering instruction in French are associated with higher OSSLT performance, holding all other variables constant. Specifically, French-language schools are predicted to have a 0.31 unit increase in the square root of the OSSLT first attempt pass rate compared to English-language schools. The 95% confidence interval ranging from 0.2099 to 0.4118 indicates a consistent, strong and statistically significant positive effect, or correlation.
+
+A particularly important finding concerns the impact of special education. Rather than following a simple linear pattern, the percentage of students receiving special education services shows a nonlinear effect on OSSLT outcomes. The model includes both a linear and a squared term for this predictor. The linear term has a negative coefficient of -0.0136, while the squared term is also negative and statistically significant, with a coefficient of -0.0003. This suggests that the negative effect of special education becomes slightly(-0.0003 only) increasingly severe as the proportion of students in special education rises, indicating a compounding disadvantage in schools with especially high concentrations of special education students.
+
+In addition, two other indicators of socioeconomic disadvantage, the percentage of students from low-income households and the percentage whose parents have no post-secondary education, are both significantly associated with lower OSSLT performance. Each one-percentage-point increase in students from low-income households corresponds to a 0.0116 unit decrease in the square root of the OSSLT pass rate (95% CI: -0.0168 to -0.0064), while each additional percentage point of students whose parents lack formal post-secondary credentials is associated with a 0.0310 unit decrease (95% CI: -0.0379 to -0.0242). The narrow confidence intervals across all predictors indicate that the estimated effects are both precise and robust. An interaction term between these two predictors was also tested during transformation, as they are slightly correlated, but it did not improve the model.
+
+
+## Comparing with Literature
+
+The findings from our final regression model align closely with much of the existing literature on factors influencing student literacy outcomes. Consistent with @zhang2020family, we found that both family income and parental education level are significant predictors of OSSLT success: schools with higher percentages of students from low-income households and students whose parents lack post-secondary education showed notably lower OSSLT pass rates. This supports the broader claim that socioeconomic status plays a critical role in shaping educational achievement. Similarly, our results reinforce the observations of @vaughn2014intensive, as schools with higher proportions of students receiving special education services were significantly associated with lower OSSLT outcomes, likely due to the academic challenges these students face, even with accommodations.
+
+However, our results diverge from the expectation presented by @bernhofer2022effect, who suggest students perform better when taught in their first language. In our analysis, schools offering instruction in French had significantly higher OSSLT performance, even though the OSSLT is administered in English. This suggests that French language instruction may be associated with school environments or educational practices that contribute positively to student literacy, despite the language difference. It may also reflect broader institutional or cultural differences between French and English schools in Ontario that warrant further exploration, such as school funding models, curriculum focus, or community engagement.
+
+Our hypothesis regarding school type was not supported in the final model. School type, which identifies whether a school is Catholic or Public, was excluded due to a lack of statistical significance as discussed above. This outcome contrasts with the findings of @cheema2024difference, who reported that private schools tend to outperform public schools in literacy achievement. While we expected Catholic schools to demonstrate higher OSSLT performance due to structured curricula or the potential influence of religious education resources, our model did not find a meaningful difference once other variables were accounted for. This suggests that variation in OSSLT performance across schools is more strongly explained by socioeconomic and instructional factors than by school type alone. 
+
+
+```{r}
+#| label: tbl-final-model-fit
+#| tbl-cap: "Model Fit Statistics"
+#| echo: false
+
+model_metrics <- data.frame(
+  Metric = c(
+    "R-squared",
+    "Adjusted R-squared",
+    "AIC",
+    "BIC",
+    "Residual Std. Error"
+  ),
+  Value = c(
+    summary(model_clean)$r.squared,
+    summary(model_clean)$adj.r.squared,
+    AIC(model_clean),
+    BIC(model_clean),
+    summary(model_clean)$sigma
+  )
+)
+
+# Display table
+kable(model_metrics, digits = 4)
+```
+
+## Model Performance Assessment
+The performance of the final multiple linear regression model, as shown in @tbl-final-model-fit, can be evaluated using several statistical metrics that assess both goodness of fit and model parsimony. One of the most interpretable metrics is the R-squared value, which in this model is 0.5975. This indicates that approximately 60% of the variation in the square root of the OSSLT first-attempt pass rate is explained by the predictors included in the model. In the context of educational research, where student performance can be influenced by many unmeasured social, psychological, and institutional factors, an R-squared value above 0.5 is considered relatively strong. It suggests that the model captures a substantial portion of the meaningful variance across schools in Ontario.
+
+The Adjusted R-squared value, which accounts for the number of predictors in the model, is 0.5947. While slightly lower than the unadjusted R-squared, this is expected and confirms that the included predictors contribute meaningfully to explaining the outcome without overfitting the data. The minimal difference between the two values suggests that the model achieves a good balance between explanatory power and complexity. This strengthens confidence that the model's performance is not artificially inflated by the number of predictors used.
+
+Beyond explanatory power, model selection criteria such as the Akaike Information Criterion (AIC), and the Bayesian Information Criterion (BIC) provide important insights into model efficiency and generalizability, using likelihood approach. AIC are measures of model fit that penalize complexity, with lower values indicating better-fitting models. In our model, the AIC is 831.5327. 
+
+The distinction between AIC and AICc lies in their intended use: AICc is a bias-corrected version of AIC that is particularly useful when the sample size is small or when the number of estimated parameters is a moderate to large fraction of the sample size. According to the rule of thumb provided by @burnham2004multimodel, AICc is preferred over AIC when the sample size $n \leq 40(p + 2)$ where p is the number of predictors. Based on this criterion, our dataset includes around eight hundred observations and only four predictors, which indicates that AIC is a more suitable measure for evaluating our model. This explains how only AIC is used for analysis throughout this report.
+
+The final model exhaustively improved from the original model. With 5% for R Squared, 4000+ unit of improvement in AIC and BIC, improved model assumptions. **Table 5** gives values of these metrics from the original model, **Figure 2 and Figure 3** gives original residual plots, to observe improvements for comparison.
+
+# Discussion and conclusion
+
+Through multiple linear regression with model refinement and diagnostics, we identified key predictors—such as school language, special education proportion, and indicators of socioeconomic status—that collectively explain meaningful variation in OSSLT first-attempt pass rates across Ontario schools.
+
+## Key Findings
+
+- OSSLT performance is closely correlated to socioeconomic background. Students from **low-income households** or whose **parents lack post-secondary education** tend to have lower success rates. This aligns with the findings of @zhang2020family, who emphasized the impact of family income and parental education on academic outcomes.
+
+- Schools with a higher proportion of students receiving **special education services** show reduced OSSLT performance, with the negative effect becoming stronger as the proportion increases. This supports the work of @vaughn2014intensive, who documented the academic challenges often faced by students in special education, even when accommodations are provided.
+
+- **French-language schools** generally perform better on the OSSLT than English-language schools, despite the test being administered in English. This contrasts with the expectation from @bernhofer2022effect, who suggested that students perform best when instructed in their first language. Our findings suggest that other institutional or pedagogical factors may be contributing to this result.
+
+- **School type (Catholic vs. Public)** does not appear to significantly affect OSSLT outcomes after accounting for other factors. This differs from the conclusion of @cheema2024difference, who found that private or religiously affiliated schools often outperform public ones. Our model suggests that socioeconomic and instructional variables may be more influential.
+
+## Recommendations
+
+Based on these findings, we suggest several steps that could help improve student outcomes on the OSSLT:
+
+- **Targeted support for schools with higher needs:** Schools with a large proportion of low-income families or students with limited parental education should receive more funding and resources. This might include tutoring programs, school-wide literacy interventions, or family engagement initiatives.
+- **Stronger special education support:** The compounding negative effect of special education proportions suggests that simply offering services may not be enough. Schools may need more specialized staff, better training, or innovative teaching methods to better support these students.
+- **Learning from French-language schools:** Since French-language schools performed better, it could be useful to study their practices more closely. Sharing strategies across school boards might help improve English-language school outcomes as well.
+- **Policy changes based on evidence:** Policymakers should consider incorporating these findings into provincial education policy. For instance, funding formulas might be adjusted to better reflect schools’ needs based on demographics like income and parental education.
+
+## Limitations
+
+Despite the strengths of this study, there are several limitations to consider.
+
+- **Snapshot Data: **Our study is based on cross-sectional data, which captures a single moment in time. This means we can observe associations between variables, but we cannot establish cause-and-effect relationships. For instance, while we found a link between parental education and OSSLT performance, we cannot confirm that one directly causes the other.
+- **Limited View of Literacy: ** The OSSLT pass rate is a standardized measure of English literacy, but it may not fully reflect students’ actual language skills. Some students may perform poorly on tests despite being strong readers or communicators in everyday life. As a result, our outcome variable may miss other important aspects of literacy.
+- **Missing Influential Factors: **Our model only includes a small set of predictors. Other key influences on student performance—such as teacher effectiveness, school resources, peer environments, or mental health services—were not part of our dataset. These unmeasured variables could play a significant role in OSSLT outcomes.
+- **Outlier Exclusion Trade-off: **To improve model accuracy, we removed several statistical outliers. However, these outliers may represent meaningful cases, such as schools with exceptional challenges or innovative practices. Excluding them improves model fit but reduces our ability to understand these unique situations.
+- **Interpretation Challenges from Transformation: **We applied a square root transformation to meet regression assumptions. While this improved the statistical validity of the model, it made the results harder to interpret. Stakeholders like educators or policymakers may find transformed outcomes less intuitive than raw pass rates.
+- **Oversimplified Relationships: **Our model uses a linear regression framework, which assumes that the relationships between variables are consistent and additive. However, educational outcomes are often shaped by more complex dynamics, such as interaction effects or non-linear trends, which our model may not fully capture.
+- **Presence of Fake data: **Although datasets from Ontario Government website is highly reliable, there might still be subjectivity. The School Language finding is suprising but also against common sense, fake data entry presence serves as a potenial reason for French Schools performing better.
+
+## Suggestions for Future Research
+
+To address these limitations and build on our findings, future studies may focus on:
+
+- **Incorporate Cross-Validation for Better Generalization: **Future work should use cross-validation techniques, such as K-fold CV or LOOCV, to assess model stability and predictive performance on unseen data. This approach can help ensure the results are not overly dependent on the specific training data, improving generalization and reducing the risk of overfitting.
+- **Apply Regularization to Control Model Complexity:** Techniques like LASSO and Ridge regression can be used to penalize overly complex models. These methods improve prediction by shrinking or removing irrelevant coefficients, reducing overfitting while keeping essential predictors.
+- **Use Validation-Based Model Selection:** Future studies should compare multiple models—including versions with interaction or polynomial terms—and select the one with the best validation performance. This ensures a better balance between fit and simplicity.
+- **Expand the Set of Predictors with Caution:** Including more variables, such as **teacher experience**, **school funding**, **course and program offered** or **student engagement**, may improve model accuracy. However, to manage the risk of overfitting, regularization or variable selection should be applied alongside.
+- **Validate with a Test Set:** To assess how well the model predicts new data, researchers should split the data into a training set and a test set, using the test set strictly for model evaluation. This simulates real-world prediction scenarios to conclude the usefulness of the model.
+- **Explore Interaction and Nonlinear Effects:** Rather than assuming relationships are additive or linear, future work could explore interaction terms and nonlinear models (e.g., splines or decision trees) to better reflect complex educational dynamics.
+- **Compare Across Regions or Systems:** Applying similar models to other provinces or countries would test whether findings hold across different educational contexts. This helps assess the generalizability of the results.
+- **Integrate Longitudinal or Time-Series Approaches:** Tracking student or school data over time allows the use of autoregressive models to study how factors evolve and influence OSSLT outcomes in the long term.
+
+## Final Thoughts
+
+In conclusion, this study provides valuable insights into how school-level and family-level factors influence OSSLT success across Ontario. Socioeconomic disadvantage, particularly low income and parental education, emerged as strong predictors of lower test performance. Special education services also had a clear and compounding negative effect. On the other hand, French-language schools unexpectedly outperformed English-language ones, more investigations are essential to re-evaluate what contributes to school success beyond just language, such as differences in class models, courses and extracurricular.
+
+Although we found no significant impact from school type, our results highlight that improving educational outcomes in Ontario requires targeted support, informed policy, and a better understanding of local school environments. By addressing the challenges identified in this study, educators and policymakers can work toward a more equitable and effective education system for all students.
+
+\newpage
+# References
+
