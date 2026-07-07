@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scotiabank × UofT Big Data & AI Competition | Junyi Hou</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.05em;
+      margin-top: 6px;
+    }
+
+    .summary-box {
+      background: #f7f9fc;
+      border: 1px solid #dbe4f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 24px 0;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .result-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .result-card strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.95em;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin: 6px 8px 6px 0;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+
+      table {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="../index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="index.html">General</a>
+            <a href="ai-dependency.html">AI Dependency Survey Research</a>
+            <a href="spss-osslt-regression.html">SPSS &amp; R Regression Analysis</a>
+            <a href="imi-big-data.html">Scotiabank × UofT Big Data &amp; AI Competition</a>
+            <a href="ontario-infrastructure.html">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="../pages/news.html">News &amp; Ongoing</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Scotiabank × UofT Big Data &amp; AI Competition</h1>
+
+    <p class="subtitle">
+      An end-to-end anti-money laundering analytics solution.
+    </p>
+
+    <div class="summary-box">
+      <strong>Project summary:</strong>
+      This project was completed as Team 88 for the IMI Big Data &amp; AI Competition. Our team built
+      an end-to-end anti-money laundering solution combining an AML knowledge library, data cleaning,
+      feature engineering, clustering, unsupervised anomaly detection, rule-based risk scoring, score fusion,
+      customer-level explanations, and a GUI explanation viewer.
+
+      Top 5 Finalist from 430+ PhD, Master's, and undergraduate students across 90+ teams from the University of Toronto, University of Toronto Mississauga and University of Toronto Scarborough.
+
+      Note: We have the least amount of team members out of the 5 finalist teams. Therefore more work is distributed to all team members.
+      <br /><br />
+      Team members: Danny Han, Edward Junsyoung Lee, and Junyi Hou.
+      <br /><br />
+      Code for this project is available upon email request.
+    </div>
+
+    <p>
+      <a class="button-link" href="../files/imi-big-data/IMI_Big_Data_AI_Competition.pdf">View presentation PDF</a>
+    </p>
+
+    <h2>Project Goal</h2>
+    <p>
+      The goal of the project was to identify potentially suspicious customers for AML review while keeping
+      the system interpretable. Instead of relying only on black-box machine learning, the solution combined
+      source backed AML typologies, engineered risk features, unsupervised anomaly detection, and rule based
+      scoring.
+    </p>
+
+    <h2>Deliverables</h2>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>1</strong>
+        AML Knowledge Library with red flags, typologies, source traceability, and feature mapping.
+      </div>
+
+      <div class="result-card">
+        <strong>2</strong>
+        Bad-actor detection pipeline producing risk scores and flagged customer outputs.
+      </div>
+
+      <div class="result-card">
+        <strong>3</strong>
+        Customer-level explanations describing why customers were flagged or not flagged.
+      </div>
+    </div>
+
+    <h2>AML Knowledge Library</h2>
+    <p>
+      The AML Knowledge Library served as the research foundation for the project. It organized money
+      laundering and terrorist financing red flags into a structured reference system. The library focused
+      on organized crime typologies and connected each red flag to source-backed documentation and possible
+      data signals.
+    </p>
+
+    <ul>
+      <li>Built a structured AML knowledge base with 147+ red flags and indicators.</li>
+      <li>Covered typologies such as trade-based money laundering, bulk cash smuggling, oil smuggling,
+        Chinese money laundering networks, synthetic opioids, underground banking, human trafficking,
+        and general money laundering / terrorist financing indicators.</li>
+      <li>Mapped red flags to engineered features used later in the detection pipeline.</li>
+      <li>Supported interpretability by aligning model features and explanation categories with AML concepts.</li>
+    </ul>
+
+    <h2>Data Cleaning and Feature Engineering</h2>
+    <p>
+      The pipeline cleaned KYC and transaction data before building a master feature table. Feature engineering
+      was guided by the AML Knowledge Library so that model inputs were tied to meaningful risk signals rather
+      than arbitrary variables.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Feature Group</th>
+          <th>Examples</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Velocity</td>
+          <td>Transaction counts, per-day rates, flow-through timing, sudden inflow/outflow patterns.</td>
+        </tr>
+
+        <tr>
+          <td>Amount / Structuring</td>
+          <td>Round amounts, just-below-threshold counts, large transaction counts, structuring flags.</td>
+        </tr>
+
+        <tr>
+          <td>Channel</td>
+          <td>Wire transfers, ABM/cash activity, EFT/EMT/card/cheque volumes, multi-channel behavior.</td>
+        </tr>
+
+        <tr>
+          <td>Geographic</td>
+          <td>Country/province/city diversity, cross-border flags, high-risk jurisdiction indicators.</td>
+        </tr>
+
+        <tr>
+          <td>Behavioral / Profile</td>
+          <td>Lifestyle mismatch, missing KYC, account age, business age, shell/cash-intensive/MSB indicators.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Clustering and Customer Segmentation</h2>
+    <p>
+      Kmeans Clustering was used to segment customers by behavior and support risk interpretation. The project used
+      dimensionality reduction and clustering to identify groups of customers with similar transaction and profile
+      patterns.
+    </p>
+
+    <ul>
+      <li>Used Factor Analysis for Mixed Data (FAMD) to reduce mixed numerical and categorical features.</li>
+      <li>Applied K-means clustering to create customer segments.</li>
+      <li>Used silhouette score and elbow inertia to support model selection.</li>
+      <li>Explored separate segmentation for individual and business customers.</li>
+      <li>Used selective inference concepts to evaluate whether cluster differences were statistically meaningful. Meaningful clusters may receive a small boost in score.</li>
+    </ul>
+
+    <h2>Machine Learning Models</h2>
+    <p>
+      Because labeled suspicious/non-suspicious outcomes were limited, the project emphasized unsupervised anomaly
+      detection methods. These models were used together with rule-based scoring rather than replacing AML logic.
+    </p>
+
+    <ul>
+      <li>Local Outlier Factor (LOF)</li>
+      <li>Angle-Based Outlier Detection (ABOD)</li>
+      <li>Isolation Forest</li>
+    </ul>
+
+    <p>
+      The ML models helped identify unusual customers within the engineered feature space, while the rule-based
+      system preserved interpretability and connection to AML red flags.
+    </p>
+
+    <h2>Rule-Based Risk Scoring</h2>
+    <p>
+      The rule-based algorithm produced interpretable risk scores using five AML-aligned categories. Each category
+      used feature thresholds and weights connected to the AML Knowledge Library.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Risk Category</th>
+          <th>Weight</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Structuring &amp; Amount</td>
+          <td>25%</td>
+          <td>Captures suspicious amounts, round values, and just-below-threshold activity.</td>
+        </tr>
+
+        <tr>
+          <td>Channel</td>
+          <td>25%</td>
+          <td>Captures risky transaction channels such as cash, wire, Western Union, and multi-channel behavior.</td>
+        </tr>
+
+        <tr>
+          <td>Geographic</td>
+          <td>20%</td>
+          <td>Captures cross-border behavior and high-risk jurisdiction exposure.</td>
+        </tr>
+
+        <tr>
+          <td>Behavioral</td>
+          <td>20%</td>
+          <td>Captures flow-through activity, lifestyle mismatch, sudden inflow/outflow, and unusual behavior.</td>
+        </tr>
+
+        <tr>
+          <td>Profile</td>
+          <td>10%</td>
+          <td>Captures business/profile risk indicators such as MSB, shell company, and cash-intensive flags.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Fusion Algorithm</h2>
+    <p>
+      The fusion algorithm combined rule-based risk scores with unsupervised anomaly scores. This design allowed
+      the project to balance explainability and anomaly detection.
+    </p>
+
+    <p>
+      The final risk score used a weighted combination of rule-based and machine learning scores. Customers in the
+      top 5% by risk score were flagged for review.
+    </p>
+
+    <h2>Explanation Generator and GUI Viewer</h2>
+    <p>
+      The explanation generator created short, non-technical explanations for each customer. The goal was to make
+      the outputs usable by AML staff or reviewers, not only by data scientists.
+    </p>
+
+    <ul>
+      <li>Generated one explanation per customer.</li>
+      <li>Explained whether the customer was flagged or not flagged.</li>
+      <li>Listed contributing risk categories such as structuring, channel, geographic, behavioral, and profile risk.</li>
+      <li>Avoided unnecessary machine learning jargon.</li>
+      <li>Supported a GUI viewer for browsing and searching customer explanations.</li>
+    </ul>
+
+    <h2>My Contributions</h2>
+    <p>
+      My work mainly focused on the data preparation and clustering side of the project, including customer
+      segmentation, dimensionality reduction, model selection, clustering interpretation, and statistical validation
+      ideas (Selective Inference). I also contributed to connecting the clustering output with the broader AML detection pipeline.
+    </p>
+
+    <h2>Skills Demonstrated</h2>
+    <p>
+      <span class="tag">Python</span>
+      <span class="tag">Machine Learning</span>
+      <span class="tag">AML Analytics</span>
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Feature Engineering</span>
+      <span class="tag">Clustering</span>
+      <span class="tag">FAMD</span>
+      <span class="tag">K-means</span>
+      <span class="tag">Anomaly Detection</span>
+      <span class="tag">Rule-Based Scoring</span>
+      <span class="tag">Model Interpretation</span>
+      <span class="tag">Team Project</span>
+    </p>
+
+    <a class="back-link" href="../index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
