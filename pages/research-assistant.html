@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Assistant | Junyi Hou</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin-bottom: 32px;
+    }
+
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .nav-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .dropbtn {
+      color: #222;
+      text-decoration: none;
+      font-size: 0.95em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover,
+    .dropbtn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      min-width: 340px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #222;
+      text-decoration: none;
+      font-size: 0.92em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #f7f7f7;
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.3em;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 32px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 1.1em;
+      margin-top: 6px;
+    }
+
+    .news-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      background: #fafafa;
+    }
+
+    .date {
+      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      margin: 4px 4px 4px 0;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: #0056b3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.95em;
+    }
+
+    .button-link:hover {
+      background: #003f82;
+      text-decoration: none;
+    }
+
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .dropdown-content {
+        left: 0;
+        right: auto;
+      }
+    }
+    .research-figure {
+    margin: 20px 0;
+    }
+
+    .research-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    }
+
+    .research-figure figcaption {
+    margin-top: 8px;
+    color: #666;
+    font-size: 0.95em;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav-container">
+      <a class="nav-name" href="../index.html">Junyi Hou</a>
+
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">Projects ▾</button>
+          <div class="dropdown-content">
+            <a href="../projects/index.html">General</a>
+            <a href="../projects/ai-dependency.html">AI Dependency Survey Study</a>
+            <a href="../projects/spss-osslt-regression.html">SPSS & R OSSLT Regression</a>
+            <a href="../projects/imi-big-data.html">Scotiabank × UofT Big Data & AI Competition</a>
+            <a href="../projects/ontario-infrastructure.html">Ontario Infrastructure Clustering Project</a>
+          </div>
+        </div>
+
+        <a href="news.html">News &amp; Ongoing</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+  <h1>Research Assistant</h1>
+
+  <p class="subtitle">
+    Dr. Michael Surette Laboratory | McMaster University
+  </p>
+
+  <p>
+    I support microbiome research by preparing complex datasets, evaluating
+    statistical approaches, and developing tools that help researchers explore
+    their data. Working with the IMAGINE study, I bring statistical analysis
+    and programming skills to questions about how microbial communities
+    differ across patient samples.
+  </p>
+
+  <h2>My Contributions</h2>
+
+  <ul>
+    <li>
+      <strong>Building a reliable foundation for research.</strong>
+      I organize and document large datasets and create reusable workflows
+      that keep analyses consistent, making it easier for the lab to revisit,
+      extend, and build on the work.
+    </li>
+    <li>
+      <strong>Evaluating the strength of analytical results.</strong>
+      I compare statistical approaches to assess whether observed patterns
+      remain consistent when the data is prepared or analyzed differently.
+      This helps the lab understand how analytical choices affect its findings.
+    </li>
+    <li>
+      <strong>Making findings easier to understand.</strong>
+      I communicate methods and results through reports, visualizations,
+      summary tables, and presentations, supporting discussion with
+      researchers from biomedical backgrounds.
+    </li>
+  </ul>
+
+  <h2>R Shiny Data Explorer</h2>
+
+  <p>
+    I developed an interactive R Shiny application that brings microbiome
+    data exploration into a visual interface. Researchers can use filters,
+    summaries, and plots to investigate the data without editing R scripts.
+    The application makes the work easier to review and supports discussion
+    of patterns and follow-up research questions.
+  </p>
+
+  <figure class="research-figure">
+    <a href="../files/r-shiny-data-explorer.png">
+      <img
+        src="../files/r-shiny-data-explorer.png"
+        alt="Screenshot of the R Shiny microbiome Data Explorer"
+        loading="lazy"
+      />
+    </a>
+    <figcaption>
+      R Shiny Data Explorer developed to support the lab's research.
+      Click the image to view it at full size.
+    </figcaption>
+  </figure>
+
+  <h2>Looking Ahead</h2>
+
+  <p>
+    My next step is to connect microbiome patterns with patient information,
+    helping the lab explore whether differences in microbial communities
+    relate to clinical or demographic characteristics and identify questions
+    for further investigation.
+  </p>
+
+  <a class="back-link" href="../index.html">← Back to homepage</a>
+  </main>
+</body>
+</html>
